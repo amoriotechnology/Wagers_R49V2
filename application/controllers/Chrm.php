@@ -4683,59 +4683,108 @@ private function processTaxData($key, $value) {
 
                 
 
+// Manage Timesheet
+public function manage_timesheet() 
+{
+    $CI = & get_instance();
+    $CI->load->model('Web_settings');
+    $this->load->model('Hrm_model');
+    $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+    $data['setting_detail']            = $setting_detail;
+    $data['title']            = display('manage_employee');
+    $data['timesheet_list']    = $this->Hrm_model->timesheet_list();
+    $data['timesheet_data_get']    = $this->Hrm_model->timesheet_data_get();
+    $content  = $this->parser->parse('hr/timesheet_list', $data, true);
+    $this->template->full_admin_html_view($content);
+}
 
-  public function manage_timesheet() {
+// Fetch data in Manage TimeSheet List - Madhu
+public function manageTimesheetListData()
+{
+    $encodedId     = isset($_GET["id"]) ? $_GET["id"] : null;
+    $limit          = $this->input->post("length");
+    $start          = $this->input->post("start");
+    $search         = $this->input->post("search")["value"];
+    $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
+    $orderDirection = 'desc'; 
+    $emp_name       = $this->input->post('employee_name');
+    $items          = $this->Hrm_model->getPaginatedmanagetimesheetlist($limit,$start,$orderField,$orderDirection,$search,$emp_name);
+    $totalItems     = $this->Hrm_model->getTotalmanagetimesheetlist($search,$emp_name);
+    $data           = [];
+    $i              = $start + 1;
+    $edit           = "";
+    $delete         = "";
+    foreach ($items as $item) { //echo "<pre>"; print_r($item); echo "</pre>"; die;
 
-            $CI = & get_instance();
+    $user ='<a href="' . base_url("Chrm/employee_payslip_permission/" . $item["timesheet_id"]) . '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-user" aria-hidden="true"></i></a>';
 
-            $CI->load->model('Web_settings');
-            $this->load->model('Hrm_model');
+    $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["timesheet_id"]) .
+            '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-download" aria-hidden="true"></i></a>';
 
-            $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
+    $delete = '<a onClick=deleteTimesheetdata('.$item["timesheet_id"].') class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>';
 
-            $data['setting_detail']            = $setting_detail;
+    $status = $item['uneditable'] == 1 ? '<span class="green">Generated</span>' : '<span class="red">Pending</span>';
+        $row = [
+            'id'      => $i,
+            "first_name"    => $item["first_name"] .' '. $item["middle_name"].' '. $item["last_name"],
+            "job_title"  => $item["job_title"],
+            "payroll_type"  => $item["payroll_type"],
+            "month"         => $item["month"],
+            "total_hours"   => $item["total_hours"],
+            "uneditable"   => $status,
+            "action"   => $user . $download . $delete,
+        ];
+        $data[] = $row;
+        $i++;
+    }
+    $response = [
+        "draw"            => $this->input->post("draw"),
+        "recordsTotal"    => $totalItems,
+        "recordsFiltered" => $totalItems,
+        "data"            => $data,
+    ];
+    echo json_encode($response);
+}
 
-             $data['title']            = display('manage_employee');
-             $data['timesheet_list']    = $this->Hrm_model->timesheet_list();
-             $data['timesheet_data_get']    = $this->Hrm_model->timesheet_data_get();
+
+// Manage Time Sheet Data Delete - Madhu
+public function timesheet_delete() 
+{
+    $this->load->model('Hrm_model');
+    $id = $this->input->post('id');
+    $result = $this->Hrm_model->deleteTimesheetdata($id);
+    if ($result) {
+        $response = array('status' => 'success','msg'    => 'TimeSheet has been deleted successfully!');
+    } else {
+        $response = array('status' => 'failure', 'msg' => 'Unable to delete the timeSheet. Please try again!');
+    }
+    echo json_encode($response);
+}
 
 
-           
-             $content                  = $this->parser->parse('hr/timesheet_list', $data, true);
-            $this->template->full_admin_html_view($content);
-            }
+public function manage_officeloan() {
+    $this->load->model('Hrm_model');
+    $CI = & get_instance();
+
+    $CI->load->model('Web_settings');
+
+    $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
 
 
 
+    $data['title']            = display('manage_employee');
 
-
-
-
-
- 
-            public function manage_officeloan() {
-                $this->load->model('Hrm_model');
-                $CI = & get_instance();
-
-                $CI->load->model('Web_settings');
+     $data['office_loan_list']    = $this->Hrm_model->office_loan_list();
      
-                $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
-     
+     $data['officeloan_data_get']    = $this->Hrm_model->officeloan_data_get();
 
 
-                $data['title']            = display('manage_employee');
-
-                 $data['office_loan_list']    = $this->Hrm_model->office_loan_list();
-                 
-                 $data['officeloan_data_get']    = $this->Hrm_model->officeloan_data_get();
-
- 
-                 $data['setting_detail']    = $setting_detail;
+     $data['setting_detail']    = $setting_detail;
 
 
-                 $content                  = $this->parser->parse('hr/officeloan_list', $data, true);
-                $this->template->full_admin_html_view($content);
-                }
+     $content                  = $this->parser->parse('hr/officeloan_list', $data, true);
+    $this->template->full_admin_html_view($content);
+}
         
 
 
@@ -4751,35 +4800,6 @@ private function processTaxData($key, $value) {
     }
     
     
-
-
-public function timesheet_delete($id){
-    $this->db->where('timesheet_id',$id);
-     $this->db->delete('timesheet_info');
-     $this->db->where('timesheet_id',$id);
-     $this->db->delete('timesheet_info_details');
-     $this->db->where('time_sheet_id',$id);
-     $this->db->delete('tax_history');
-     $this->db->where('timesheet_id',$id);
-     $this->db->delete('info_payslip');
-     $this->db->where('time_sheet_id',$id);
-     $this->db->delete('tax_history_employer');
-    $this->session->set_flashdata('message', "Deleted Successfully");
-       redirect("Chrm/manage_timesheet");
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
