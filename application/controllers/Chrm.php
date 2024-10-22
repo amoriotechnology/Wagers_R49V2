@@ -4691,7 +4691,7 @@ public function manage_timesheet()
     $this->load->model('Hrm_model');
     $setting_detail = $CI->Web_settings->retrieve_setting_editdata();
     $data['setting_detail']            = $setting_detail;
-    $data['title']            = display('manage_employee');
+    $data['title']            = 'Manage Timesheet';
     $data['timesheet_list']    = $this->Hrm_model->timesheet_list();
     $data['timesheet_data_get']    = $this->Hrm_model->timesheet_data_get();
     $content  = $this->parser->parse('hr/timesheet_list', $data, true);

@@ -195,7 +195,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "csv",
-                "title": "Report",
+                "title": "Manage Timesheet",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':not(:eq(7))'
@@ -203,7 +203,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "pdf",
-                "title": "Report",
+                "title": "Manage Timesheet",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':not(:eq(7))'
