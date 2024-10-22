@@ -151,6 +151,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "s_stax" },
          { "data": "ts_stax" },
          ],
+        "order": [4, 'desc'],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 7],
