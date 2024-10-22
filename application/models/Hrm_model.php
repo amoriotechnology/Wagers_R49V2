@@ -4312,7 +4312,7 @@ public function getPaginatedpayslip($limit, $offset, $orderField, $orderDirectio
     }
     
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
 
     $query = $this->db->get();
 
@@ -4360,7 +4360,7 @@ public function getPaginatedscchoiceyes($limit, $offset, $orderField, $orderDire
     $this->db->where('c.choice', 'Yes');
     $this->db->where('a.payroll_type', 'Sales Partner');
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
     $query = $this->db->get();
 
     if ($query === false) {
@@ -4410,7 +4410,7 @@ public function getPaginatedscpayslip($limit, $offset, $orderField, $orderDirect
     $this->db->where('b.choice', 'No');
 
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
     $query = $this->db->get();
     
     if ($query === false) {
@@ -4463,7 +4463,7 @@ public function getTotalpayslip($search, $date, $emp_name = 'All')
     }
 
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
 
     $query = $this->db->get();
 
