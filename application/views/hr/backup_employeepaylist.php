@@ -181,7 +181,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
         "stateSave": true,
 
         "stateSaveCallback": function(settings, data) {
-            localStorage.setItem('manageemployee', JSON.stringify(data));
+            localStorage.setItem('Manage Employee', JSON.stringify(data));
         },
         "stateLoadCallback": function(settings) {
             var savedState = localStorage.getItem('manageemployee');
@@ -193,7 +193,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                 "extend": "copy",
                 "className": "btn-sm",
                 "exportOptions": {
-                    "columns": ':not(:eq(9))'
+                    "columns": ':visible'
                 }
             },
             {
@@ -201,7 +201,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                 "title": "Report",
                 "className": "btn-sm",
                 "exportOptions": {
-                    "columns": ':not(:eq(9))'
+                    "columns": ':visible'
                 }
             },
             {
@@ -209,14 +209,14 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                 "title": "Report",
                 "className": "btn-sm",
                 "exportOptions": {
-                    "columns": ':not(:eq(9))'
+                    "columns": ':visible'
                 }
             },
             {
                 "extend": "print",
                 "className": "btn-sm",
                 "exportOptions": {
-                    "columns": ':not(:eq(9))'
+                    "columns": ':visible'
                 },
             },
             {

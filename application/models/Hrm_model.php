@@ -2985,25 +2985,89 @@ public function delete_tax($tax = null, $state) {
 
 
 
-   public function employee_list(){
+   public function employee_list()
+   {
+        $this->db->select('*');
+        $this->db->from('employee_history');
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+        $query = $this->db->get();
 
-$this->db->select('*');
-     $this->db->from('employee_history');
-     $this->db->where('create_by',$this->session->userdata('user_id'));
-     
-     
-    //  $this->db->select('a.*,b.designation');
-    //  $this->db->from('employee_history a');
-    //  $this->db->join('designation b','a.designation = b.id');
-    //  $this->db->where('a.create_by',$this->session->userdata('user_id'));
-    //  $this->db->order_by('a.designation', 'DESC');
-     $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+           return $query->result_array();
+        }
+        return false;
+    }
 
-     if ($query->num_rows() > 0) {
-       return $query->result_array();
-     }
-     return false;
-}
+    // Get Employee List Data
+    public function getEmployeeListdata($limit, $offset, $orderField, $orderDirection, $search)
+    {
+        $this->db->select('*');
+        $this->db->from('employee_history');
+        $orderDirection = (strtoupper($orderDirection) === 'DESC') ? 'DESC' : 'ASC';
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("first_name", $search);
+            $this->db->or_like("middle_name", $search);
+            $this->db->or_like("last_name", $search);
+            $this->db->or_like("designation", $search);
+            $this->db->or_like("phone", $search);
+            $this->db->or_like("email", $search);
+            $this->db->or_like("blood_group", $search);
+            $this->db->or_like("social_security_number", $search);
+            $this->db->or_like("routing_number", $search);
+            $this->db->or_like("employee_tax", $search);
+            $this->db->group_end();
+        }
+
+        $this->db->where('create_by', $this->session->userdata('user_id'));
+        
+        $this->db->order_by($orderField, $orderDirection); 
+        $this->db->order_by('id', 'DESC');
+        $this->db->limit($limit, $offset);
+        
+        $query = $this->db->get();
+        
+        if ($query === false) {
+            return [];
+        }
+        
+        return $query->result_array();
+    }
+
+
+    // Get Total Employee List Data
+    public function getTotalEmployeeListdata($search)
+    {
+        $this->db->select('*');
+        $this->db->from('employee_history');
+
+        if (!empty($search)) {
+            $this->db->like("first_name", $search);
+            $this->db->or_like("middle_name", $search);
+            $this->db->or_like("last_name", $search);
+            $this->db->or_like("designation", $search);
+            $this->db->or_like("phone", $search);
+            $this->db->or_like("email", $search);
+            $this->db->or_like("blood_group", $search);
+            $this->db->or_like("social_security_number", $search);
+            $this->db->or_like("routing_number", $search);
+            $this->db->or_like("employee_tax", $search);
+            $this->db->or_like("employee_tax", $search);
+            $this->db->group_end();
+        }
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+        $this->db->order_by('id', 'DESC');
+
+        $query = $this->db->get();
+
+        if ($query === false) {
+            return false;
+        }
+        return $query->num_rows();
+    }
+
+
 
 
 
@@ -3138,10 +3202,8 @@ public function getTaxdetailsdata($tax){
     }
     //delete employee
 
-       public function delete_employee($id) {
-
-            // echo $id; die();
-
+    public function delete_employee($id) 
+    {
         $this->db->where('id', $id);
 
         $this->db->delete('employee_history');
@@ -3155,7 +3217,6 @@ public function getTaxdetailsdata($tax){
         $this->db->delete('employee_type');
 
         return true;
-
     }
 
 
