@@ -74,13 +74,20 @@ public function formnj927($quarter = null)
 
 
 
-
- public function employee_delete($id) {
+ // Delete Employee
+ public function employee_delete() 
+ {
     $this->load->model('Hrm_model');
-    $this->Hrm_model->delete_employee($id);
-    $this->session->set_userdata(array('message' => display('successfully_delete')));
-   redirect("Chrm/manage_employee");
-    }
+    $id = $this->input->post('id');
+    $result = $this->Hrm_model->delete_employee($id);
+    if ($result) {
+        $response = array(
+            'status' => 'success',
+            'msg'    => 'Employee has been deleted successfully!'
+        );
+    } 
+    echo json_encode($response);
+}
 
 
 public function state_summary(){
@@ -5701,7 +5708,7 @@ $data2 = array(
       $this->template->full_admin_html_view($content);
     }
     
-    public function payslipIndexData() 
+public function payslipIndexData() 
 {
       $limit          = $this->input->post("length");
       $start          = $this->input->post("start");
@@ -7020,7 +7027,8 @@ if ($county_tax == $county_tax) {
 
 
 //     // Manage employee
-   public function manage_employee() {
+   public function manage_employee() 
+   {
 
 
     $CI = & get_instance();
@@ -7042,6 +7050,57 @@ if ($county_tax == $county_tax) {
  
       $content                  = $this->parser->parse('hr/employee_list', $data, true);
     $this->template->full_admin_html_view($content);
+    }
+
+    public function employeeListdatatable() 
+    {
+      $limit          = $this->input->post("length");
+      $start          = $this->input->post("start");
+      $search         = $this->input->post("search")["value"];
+      $orderField     = $this->input->post("columns")[$this->input->post("order")[1]["column"]]["data"];
+      $orderDirection = $this->input->post("order")[0]["dir"];
+      $items          = $this->Hrm_model->getEmployeeListdata($limit,$start,$orderField,$orderDirection,$search);
+      $totalItems     = $this->Hrm_model->getTotalEmployeeListdata($search);
+      $data           = [];
+      $i              = $start + 1;
+      $edit           = "";
+      $delete         = "";
+      foreach ($items as $item) { 
+
+        $user ='<a href="' . base_url("Chrm/employee_details/" . $item["id"]) . '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-user" aria-hidden="true"></i></a>';
+
+        $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["id"]) .
+            '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-download" aria-hidden="true"></i></a>';
+
+        $edit =
+        '<a href="' . base_url("Chrm/employee_update_form/" . $item["id"]) .
+            '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+
+        $delete = '<a onClick=deleteEmployeedata('.$item["id"].') class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+
+        $row = [
+            "id"      => $i,
+            "first_name"    => $item["first_name"] .' '. $item["middle_name"].' '. $item["last_name"],
+            "designation"  => $item["designation"],
+            "phone"         => $item["phone"],
+            "email" => $item['email'],
+            "blood_group"   => $item['blood_group'],
+            "social_security_number"   => $item['social_security_number'],
+            "routing_number" => $item['routing_number'],
+            "employee_tax" => $item['employee_tax'],
+            "action"       => $user . $download . $edit . $delete,
+        ];
+        $data[] = $row;
+        $i++;
+      }
+
+      $response = [
+          "draw"            => $this->input->post("draw"),
+          "recordsTotal"    => $totalItems,
+          "recordsFiltered" => $totalItems,
+          "data"            => $data,
+      ];
+      echo json_encode($response);
     }
 
 
