@@ -1476,7 +1476,7 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
         }
         $this->db->where("b.create_by", $decodedId);
         $this->db->limit($limit, $offset);
-        $this->db->order_by('a.id', 'desc');
+        $this->db->order_by($orderField, $orderDirection);
         $query = $this->db->get();
         // echo $this->db->last_query(); die();
         if ($query === false) {
