@@ -8,7 +8,7 @@
       </div>
       <div class="header-title">
          <div class="logo-holder logo-9">
-         <h1 class="getDynamictitle"><?php echo $tax_n; ?></h1>
+         <h1><?php echo $tax_n; ?></h1>
          </div>
             <ol class="breadcrumb" style=" border: 3px solid #d7d4d6;" >
                <li><a href="<?php echo base_url()?>"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
@@ -125,8 +125,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
     if ($.fn.DataTable.isDataTable('#socialsecuritytax_list')) {
         $('#socialsecuritytax_list').DataTable().clear().destroy();
     }
-    var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>";
-    var csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";
+    var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+    var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     federalincomeDataTable = $('#socialsecuritytax_list').DataTable({
         "processing": true,
         "serverSide": true,
@@ -135,7 +135,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             [10, 25, 50, 100]
         ],
         "ajax": {
-            "url": "<?php echo base_url('Chrm/stateIncomeReportData/Income%20tax?id='); ?>" + encodeURIComponent('<?php echo $_GET['id']; ?>'),
+            "url": "<?php echo base_url('Chrm/stateIncomeReportData/Income%20tax?id='); ?>" +
+                encodeURIComponent('<?php echo $_GET['id']; ?>'),
             "type": "POST",
             "data": function(d) {
                 d['<?php echo $this->security->get_csrf_token_name(); ?>'] =
@@ -149,7 +150,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                 return json.data;
             }
         },
-        "columns": [
+         "columns": [
             { "data": "table_id" },
             { "data": "first_name" },
             { "data": "employee_tax" },
@@ -162,8 +163,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             { "data": "weekly" },
             { "data": "employer_tax" },
             { "data": "employer_weekly" },
-        ],
-        "order": [6, 'desc'],
+         ],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 11],
@@ -173,14 +173,21 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             "initComplete": function() {
                 this.api().columns().every(function() {
                     var column = this;
-                    var select = $('<select><option value=""></option></select>').appendTo($(column.footer()).empty())
+                    var select = $(
+                            '<select><option value=""></option></select>'
+                        )
+                        .appendTo($(column.footer()).empty())
                         .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            var val = $.fn.dataTable.util
+                                .escapeRegex(
+                                    $(this).val()
+                                );
                             column.search(val ? '^' + val + '$' :
                                 '', true, false).draw();
                         });
                     column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
+                        select.append('<option value="' + d +
+                            '">' + d + '</option>')
                     });
                 });
             },
@@ -201,11 +208,13 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             }
             var employeeContributionTotal = calculateTotal(8);
             var employerContributionTotal = calculateTotal(9);
+
             var employerworkingContributionTotal = calculateTotal(10);
             var employerstateContributionTotal = calculateTotal(11);
 
             $(api.column(8).footer()).html('$' + employeeContributionTotal.toFixed(2));
             $(api.column(9).footer()).html('$' + employerContributionTotal.toFixed(2));
+
             $(api.column(10).footer()).html('$' + employerworkingContributionTotal.toFixed(2));
             $(api.column(11).footer()).html('$' + employerstateContributionTotal.toFixed(2));
         },
