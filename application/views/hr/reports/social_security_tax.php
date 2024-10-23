@@ -45,7 +45,7 @@
             <div class="col-sm-12">
                 <div class="col-md-6 col-sm-6" style="display: flex; justify-content: center; align-items: center;">
                     <label>Employee</label>&nbsp;&nbsp;&nbsp;
-                    <select id="customer-name-filter" name="employee_name" class="form-control employee_name">
+                    <select id="customer-name-filter" name="employee_name" class="form-control selectemployee employee_name">
                         <option value="All">All</option>
                         <?php
                           foreach ($employee_data as $emp) {
@@ -151,7 +151,6 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "s_stax" },
          { "data": "ts_stax" },
          ],
-        "order": [4, 'desc'],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 7],
@@ -354,4 +353,5 @@ tbody{
 .error-border {
     border: 2px solid red;
 }
+
 </style>

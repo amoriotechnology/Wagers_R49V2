@@ -145,7 +145,6 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "cheque_date" },
          { "data": "f_ftax" },
          ],
-        "order": [4, 'desc'],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 6],
@@ -194,7 +193,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
         },
         "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
             "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6'i><'col-sm-6'p>>",
-        "buttons": [{
+         "buttons": [{
                 "extend": "copy",
                 "className": "btn-sm",
                 "exportOptions": {
@@ -337,4 +336,14 @@ tbody{
 .error-border {
     border: 2px solid red;
 }
+
+/*.selectemployee{
+   width: 260px;
+  height: 34px;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 3px #ccc, 0 10px 15px #fff inset;
+  color: #000; 
+}*/
 </style>

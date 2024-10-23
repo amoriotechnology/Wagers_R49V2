@@ -9,7 +9,7 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 <script type="text/javascript" src="<?= base_url()?>my-assets/js/tableManager.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
 
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
@@ -236,7 +236,7 @@
                         </td>
                         <td class="search_dropdown" style="color: black; position: relative; top: 4px;">
                            <div id="datepicker-container">
-                              <input type="text" class="form-control daterangepicker_field getdate_reults" id="daterangepicker-field" name="daterangepicker-field" style="margin-top: 15px;padding: 5px; width: 200px; border-radius: 8px; height: 35px;" />
+                              <input type="text" class="form-control daterangepicker_field getdate_reults" id="daterangepicker-field" name="daterangepicker-field" autocomplete="off" style="margin-top: 15px;padding: 5px; width: 200px; border-radius: 8px; height: 35px;" />
                            </div>
                         </td>
                         <input type="hidden" class="getcurrency" value="<?= $currency; ?>">
@@ -248,9 +248,10 @@
             </div>
             <!-- <div class='col-sm-2'> -->
             <div class="dropdown bootcol" id="drop">
-               <button class="btnclr btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="position: relative; left: 185px;">
+               <button id="exportBothTables" class="btnclr btn btn">Export Both Tables to Excel</button>
+              <!--  <button class="btnclr btn btn-default dropdown-toggle download" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="position: relative; left: 185px;">
                <span class="fa fa-download"></span> <?= display('download') ?>
-               </button>
+               </button> -->
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                <li><a href="#" id="generateXls"> <img src="<?= base_url() ?>assets/images/xls.png" width="24px"> <?= display('XLS') ?></a></li>
             </ul>
@@ -732,13 +733,13 @@ function generateTaxTable(taxType, employerContributions, employeeContributions,
    
    // Collect unique tax codes
    employerContributions.forEach(item => {
-      const taxKey = item.tax.trim() + "-" + (item.code ? item.code.trim() : "");
+      const taxKey = item.tax + "-" + (item.code ? item.code : "");
       allTaxTypes[taxKey] = item.taxType || '';  
       taxTypeCounts[taxKey] = (taxTypeCounts[taxKey] || 0) + 1;
    });
 
    employeeContributions.forEach(item => {
-      const taxKey = item.tax.trim() + "-" + (item.code ? item.code.trim() : "");
+      const taxKey = item.tax + "-" + (item.code ? item.code : "");
       allTaxTypes[taxKey] = item.taxType || '';
       taxTypeCounts[taxKey] = (taxTypeCounts[taxKey] || 0) + 1;
    });
@@ -787,7 +788,7 @@ function generateTaxTable(taxType, employerContributions, employeeContributions,
       const consolidatedContributions = {};
       employerContributions.forEach(item => {
          const employeeName = item.employee_name;
-         const taxKey = item.tax.trim() + "-" + (item.code ? item.code.trim() : "");
+         const taxKey = item.tax + "-" + (item.code ? item.code : "");
          if (!consolidatedContributions[employeeName]) {
             consolidatedContributions[employeeName] = {};
          }
@@ -799,7 +800,7 @@ function generateTaxTable(taxType, employerContributions, employeeContributions,
 
       employeeContributions.forEach(item => {
          const employeeName = item.employee_name;
-         const taxKey = item.tax.trim() + "-" + (item.code ? item.code.trim() : "");
+         const taxKey = item.tax + "-" + (item.code ? item.code : "");
          if (!consolidatedContributions[employeeName]) {
             consolidatedContributions[employeeName] = {};
          }
@@ -904,9 +905,7 @@ function populateTable(response) {
 
    var rowCount = $('#livingStateTaxTable tr').length;
    stateTaxTable.DataTable();
-   // if(rowCount >= 2){
-      livingStateTaxTable.DataTable();
-    //}
+   livingStateTaxTable.DataTable();
 }
 
 // Generate Xlsx Format
@@ -930,24 +929,27 @@ function populateTable(response) {
 //  	generateExcel($("#ProfarmaInvList"));
 // });
 
-$(document).ready(function() {
-   $('#download').click(function() {
-       const wb = XLSX.utils.book_new();
+// $(document).ready(function() {
+//    $('.download').click(function() {
+//        const wb = XLSX.utils.book_new();
+//        console.log(wb, "wb");
+//        function addTableToWorkbook(tableId, sheetName) {
+//          const table = document.getElementById(tableId);
+//          const worksheet = XLSX.utils.table_to_sheet(table);
+//          XLSX.utils.book_append_sheet(wb, worksheet, sheetName);
+//        }
 
-       function addTableToWorkbook(tableId, sheetName) {
-         const table = document.getElementById(tableId);
-         const worksheet = XLSX.utils.table_to_sheet(table);
-         XLSX.utils.book_append_sheet(wb, worksheet, sheetName);
-       }
+//        addTableToWorkbook('.federal', 'Data Table 1');
+//        addTableToWorkbook('.work_state', 'Data Table 2');
+//        addTableToWorkbook('.living_state', 'Data Table 3');
+//        addTableToWorkbook('.city_tax', 'Data Table 4');
+//        addTableToWorkbook('.county_tax', 'Data Table 5');
+//        XLSX.writeFile(wb, 'data_tables.xlsx');
+//    });
+// });
 
-       addTableToWorkbook('.federal', 'Data Table 1');
-       addTableToWorkbook('.work_state', 'Data Table 2');
-       addTableToWorkbook('.living_state', 'Data Table 3');
-       addTableToWorkbook('.city_tax', 'Data Table 4');
-       addTableToWorkbook('.county_tax', 'Data Table 5');
-       XLSX.writeFile(wb, 'data_tables.xlsx');
-   });
-});
+
+
 
 
 $(document).ready(function() {
@@ -969,6 +971,72 @@ $(document).ready(function() {
       "paging": true 
    });
 });
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+   $(document).ready(function() {
+    $('#exportBothTables').click(function() {
+        var dateSearch = $('.getdate_reults').val();
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.aoa_to_sheet([]);
+
+        function createBoldCell(value) {
+            return {
+                v: value,
+                s: {
+                    font: {
+                        bold: true
+                    }
+                }
+            };
+        }
+
+        XLSX.utils.sheet_add_aoa(ws, [[createBoldCell("Pay Period: " + dateSearch)]], {origin: {r: 0, c: 0}});
+
+        XLSX.utils.sheet_add_aoa(ws, [[createBoldCell("FEDERAL TAX")]], {origin: {r: 1, c: 0}});
+        
+        var table1 = document.querySelector(".federal");
+        var data1 = XLSX.utils.sheet_to_json(XLSX.utils.table_to_sheet(table1), {header: 1});
+        var range1 = data1.length;
+
+        XLSX.utils.sheet_add_aoa(ws, data1, {origin: {r: 2, c: 0}});
+        
+        XLSX.utils.sheet_add_aoa(ws, [[createBoldCell("WORKING STATE TAX")]], {origin: {r: range1 + 2, c: 0}});
+        
+        var table2 = document.querySelector(".work_state");
+        var data2 = XLSX.utils.sheet_to_json(XLSX.utils.table_to_sheet(table2), {header: 1});
+        
+        XLSX.utils.sheet_add_aoa(ws, data2, {origin: {r: range1 + 3, c: 0}});
+        
+        var range2 = range1 + 3 + data2.length + 2; 
+        
+        XLSX.utils.sheet_add_aoa(ws, [[createBoldCell("LIVING STATE TAX")]], {origin: {r: range2, c: 0}});
+        
+        var table3 = document.querySelector(".living_state");
+        var data3 = XLSX.utils.sheet_to_json(XLSX.utils.table_to_sheet(table3), {header: 1});
+        
+        XLSX.utils.sheet_add_aoa(ws, data3, {origin: {r: range2 + 1, c: 0}}); 
+        var range3 = range2 + 1 + data3.length + 2; 
+        
+        XLSX.utils.sheet_add_aoa(ws, [[createBoldCell("CITY TAX")]], {origin: {r: range3, c: 0}});
+        
+        var table4 = document.querySelector("#CityTax");
+        var data4 = XLSX.utils.sheet_to_json(XLSX.utils.table_to_sheet(table4), {header: 1});
+        XLSX.utils.sheet_add_aoa(ws, data4, {origin: {r: range3 + 1, c: 0}}); 
+        var range4 = range3 + 1 + data4.length + 2; 
+        XLSX.utils.sheet_add_aoa(ws, [[createBoldCell("COUNTY TAX")]], {origin: {r: range4, c: 0}});
+        var table5 = document.querySelector("#CountyTax");
+        var data5 = XLSX.utils.sheet_to_json(XLSX.utils.table_to_sheet(table5), {header: 1});
+        XLSX.utils.sheet_add_aoa(ws, data5, {origin: {r: range4 + 1, c: 0}}); 
+        XLSX.utils.book_append_sheet(wb, ws, "Merged Table");
+        XLSX.writeFile(wb, "Overallsummary.xlsx");
+    });
+});
+
+
 
 </script>
 
