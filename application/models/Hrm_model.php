@@ -1463,15 +1463,19 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
         $this->db->join('employee_history c', 'c.id = b.templ_name');
         $this->db->join('timesheet_info a', 'a.timesheet_id = b.timesheet_id');
         $this->db->where("b.timesheet_id IN $subquery", NULL, FALSE);
-        if (!empty($search)) {
+       if (!empty($search)) {
             $this->db->group_start();
             $this->db->like("b.timesheet_id", $search);
             $this->db->or_like("c.first_name", $search);
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
-            $this->db->or_like("a.cheque_date", $search);
             $this->db->or_like("a.month", $search);
+            $this->db->or_like("a.cheque_date", $search);
+            $this->db->or_like("b.f_tax", $search);
+            $this->db->or_like("b.s_tax", $search);
+            $this->db->or_like("b.m_tax", $search);
+            $this->db->or_like("b.u_tax", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
@@ -1511,8 +1515,12 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
-            $this->db->or_like("a.cheque_date", $search);
             $this->db->or_like("a.month", $search);
+            $this->db->or_like("a.cheque_date", $search);
+            $this->db->or_like("b.f_tax", $search);
+            $this->db->or_like("b.s_tax", $search);
+            $this->db->or_like("b.m_tax", $search);
+            $this->db->or_like("b.u_tax", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
