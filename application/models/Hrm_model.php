@@ -1446,19 +1446,19 @@ public function employr($emp_name = null, $date = null)
 // Paginated Federal income tax
 public function getPaginatedfederalincometax($limit, $offset, $orderField, $orderDirection, $search, $date = null, $emp_name = 'All', $decodedId)
 {
-        $subquery = "(SELECT DISTINCT b.timesheet_id FROM info_payslip b JOIN timesheet_info a ON a.timesheet_id = b.timesheet_id WHERE b.create_by = '$decodedId'";
-        if ($date) {
-            $dates = explode(' to ', $date);
-            $start_date = $dates[0];
-            $end_date = $dates[1];
-            $subquery .= " AND (a.cheque_date BETWEEN '$start_date' AND '$end_date')";
-        }
+            $subquery = "(SELECT DISTINCT b.timesheet_id FROM info_payslip b JOIN timesheet_info a ON a.timesheet_id = b.timesheet_id WHERE b.create_by = '$decodedId'";
+            if ($date) {
+                $dates = explode(' to ', $date);
+                $start_date = $dates[0];
+                $end_date = $dates[1];
+                $subquery .= " AND (a.cheque_date BETWEEN '$start_date' AND '$end_date')";
+            }
         if ($emp_name !== 'All') {
             $trimmed_emp_name = trim($emp_name);
             $subquery .= " AND (TRIM(CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name)) LIKE '%$trimmed_emp_name%' OR TRIM(CONCAT_WS(' ', c.first_name, c.last_name)) LIKE '%$trimmed_emp_name%')";
         }
         $subquery .= ")";
-        $this->db->select('a.month, b.timesheet_id as timesheet, c.employee_tax, b.templ_name, a.cheque_date, c.first_name, c.middle_name, c.last_name, b.f_tax AS f_tax, b.m_tax AS m_tax, b.s_tax AS s_tax, b.u_tax AS u_tax');
+        $this->db->select('a.month, a.id, b.timesheet_id as timesheet, c.employee_tax, b.templ_name, a.cheque_date, c.first_name, c.middle_name, c.last_name, b.f_tax AS f_tax, b.m_tax AS m_tax, b.s_tax AS s_tax, b.u_tax AS u_tax');
         $this->db->from('info_payslip b');
         $this->db->join('employee_history c', 'c.id = b.templ_name');
         $this->db->join('timesheet_info a', 'a.timesheet_id = b.timesheet_id');
@@ -1470,17 +1470,13 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
-            $this->db->or_like("a.month", $search);
             $this->db->or_like("a.cheque_date", $search);
-            $this->db->or_like("b.f_tax", $search);
-            $this->db->or_like("b.s_tax", $search);
-            $this->db->or_like("b.m_tax", $search);
-            $this->db->or_like("b.u_tax", $search);
+            $this->db->or_like("a.month", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
         $this->db->limit($limit, $offset);
-        $this->db->order_by($orderField, $orderDirection);
+        $this->db->order_by('a.id', 'desc');
         $query = $this->db->get();
         // echo $this->db->last_query(); die();
         if ($query === false) {
@@ -1494,7 +1490,7 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
         $subquery = "(SELECT DISTINCT b.timesheet_id FROM info_payslip b JOIN timesheet_info a ON a.timesheet_id = b.timesheet_id WHERE b.create_by = '$decodedId'";
         if ($date) {
             $dates = explode(' to ', $date);
-           $start_date = $dates[0];
+            $start_date = $dates[0];
             $end_date = $dates[1];
             $subquery .= " AND (a.cheque_date BETWEEN '$start_date' AND '$end_date')";
         }
@@ -1503,7 +1499,7 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $subquery .= " AND (TRIM(CONCAT_WS(' ', c.first_name, c.middle_name, c.last_name)) LIKE '%$trimmed_emp_name%' OR TRIM(CONCAT_WS(' ', c.first_name, c.last_name)) LIKE '%$trimmed_emp_name%')";
         }
         $subquery .= ")";
-        $this->db->select('a.month');
+        $this->db->select('a.month, a.id');
         $this->db->from('info_payslip b');
         $this->db->join('employee_history c', 'c.id = b.templ_name');
         $this->db->join('timesheet_info a', 'a.timesheet_id = b.timesheet_id');
@@ -1515,15 +1511,12 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
-            $this->db->or_like("a.month", $search);
             $this->db->or_like("a.cheque_date", $search);
-            $this->db->or_like("b.f_tax", $search);
-            $this->db->or_like("b.s_tax", $search);
-            $this->db->or_like("b.m_tax", $search);
-            $this->db->or_like("b.u_tax", $search);
+            $this->db->or_like("a.month", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
+        $this->db->order_by('a.id', 'desc');
         $query = $this->db->get();
         // echo $this->db->last_query(); die();
         if ($query === false) {
