@@ -8,7 +8,7 @@
       </div>
       <div class="header-title">
          <div class="logo-holder logo-9">
-         <h1><?php echo $tax_n; ?></h1>
+         <h1 class="getDynamictitle"><?php echo $tax_n; ?></h1>
          </div>
             <ol class="breadcrumb" style=" border: 3px solid #d7d4d6;" >
                <li><a href="<?php echo base_url()?>"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
@@ -227,15 +227,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "csv",
-                "title": "Report",
-                "className": "btn-sm",
-                "exportOptions": {
-                    "columns": ':visible'
-                }
-            },
-            {
-                "extend": "pdf",
-                "title": "Report",
+                "text": "Excel",
+                "title": "State Report",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':visible'
@@ -244,19 +237,28 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 "extend": "print",
                 "className": "btn-sm",
+                "text": "Pdf / Print",
+                "title":"",
                 "exportOptions": {
                     "columns": ':visible'
                 },
                 "customize": function(win) {
+                    var dynamicTitle = $('.getDynamictitle').text();
                     console.log(win, "win");
                     $(win.document.body)
                         .css('font-size', '10pt')
                         .prepend(
-                            '<div style="text-align:center;"><h3>Manage Quotation</h3></div>'
-                        )
-                        .append(
-                            '<div style="text-align:center;"><h4>amoriotech.com</h4></div>'
+                            '<div style="text-align:center;"><h3>' + dynamicTitle + '</h3></div>'
                         );
+                    $(win.document.body).css({
+                        'margin': '0',
+                        'padding': '0',
+                        'page-break-after': 'always'
+                    });
+
+                    var style = '<style>@media print { @page { size: landscape; } }</style>';
+                    $(win.document.head).append(style);
+
                     $(win.document.body).find('table')
                         .addClass('compact')
                         .css('font-size', 'inherit');
@@ -266,6 +268,35 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                             $(this).remove();
                         }
                     });
+
+                    var employeeWorkingTaxTotal = 0;
+                    var employeeLivingStateTaxTotal = 0;
+                    var employerWorkingTaxTotal = 0;
+                    var employerLivingStateTaxTotal = 0;
+
+                    $(win.document.body).find('table tbody tr').each(function() {
+                        var employeeamount = parseFloat($(this).find('td:eq(8)').text()) || 0; 
+                        var employeramount = parseFloat($(this).find('td:eq(9)').text()) || 0;
+
+                        var Wemployeeamount = parseFloat($(this).find('td:eq(10)').text()) || 0; 
+                        var Lemployeramount = parseFloat($(this).find('td:eq(11)').text()) || 0;
+
+                        employeeWorkingTaxTotal += employeeamount;
+                        employeeLivingStateTaxTotal += employeramount;
+
+                        employerWorkingTaxTotal += Wemployeeamount;
+                        employerLivingStateTaxTotal += Lemployeramount;
+                    });
+                    $(win.document.body).find('table tbody').append(
+                        '<tr>' +
+                            '<th colspan="8" style="text-align:right; font-weight: bold;">Total</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + employeeWorkingTaxTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + employeeLivingStateTaxTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + employerWorkingTaxTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + employerLivingStateTaxTotal.toFixed(2) + '</th>' +
+                        '</tr>'
+                    );
+
                     $(win.document.body).find('div:last-child')
                         .css('page-break-after', 'auto');
                     $(win.document.body)

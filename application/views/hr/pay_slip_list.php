@@ -240,56 +240,107 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                 "extend": "copy",
                 "className": "btn-sm",
                 "exportOptions": {
-                    "columns": ':visible'
+                    "columns": ':not(:eq(8))'
                 }
             },
             {
                 "extend": "csv",
-                "title": "Report",
+                "title": "Generated Pay Slips List Report",
                 "className": "btn-sm",
                 "exportOptions": {
-                    "columns": ':visible'
+                    "columns": ':not(:eq(8))'
                 }
             },
-            {
+           {
                 "extend": "pdf",
-                "title": "Report",
+                "title": "Generated Pay Slips List Report",
                 "className": "btn-sm",
                 "exportOptions": {
-                    "columns": ':visible'
+                    "columns": ':not(:eq(8))'  
+                },
+                "customize": function(doc) {
+                    var totalAmount = 0;
+                    var totalOvertime = 0;
+                    var totalSalesCommission = 0;
+
+                    $(doc.content[1].table.body).each(function(index, row) {
+                        if (index === 0) return; 
+                        var amount = parseFloat(row[5].text) || 0; 
+                        var overtime = parseFloat(row[6].text) || 0; 
+                        var salesCommission = parseFloat(row[7].text) || 0;
+
+                        totalAmount += amount;
+                        totalOvertime += overtime;
+                        totalSalesCommission += salesCommission;
+                    });
+
+                    doc.content[1].table.body.push(
+                        [
+                            { text: 'Total', style: 'tableHeader', colSpan: 5, alignment: 'right', bold: true },
+                            {},
+                            {},
+                            {},
+                            {},
+                            { text: totalAmount.toFixed(2), style: 'tableCell', alignment: 'center', bold: true },
+                            { text: totalOvertime.toFixed(2), style: 'tableCell', alignment: 'center', bold: true },
+                            { text: totalSalesCommission.toFixed(2), style: 'tableCell', alignment: 'center', bold: true }
+                        ]
+                    );
+
+                    doc.content.push({ text: '', pageBreak: 'after' });
                 }
             },
             {
                 "extend": "print",
                 "className": "btn-sm",
+                "title": '',  
                 "exportOptions": {
-                    "columns": ':visible'
+                    "columns": ':not(:eq(8))'  
                 },
                 "customize": function(win) {
+                    $(win.document.body).find('div.dt-buttons').remove();
                     $(win.document.body)
                         .css('font-size', '10pt')
-                        .prepend(
-                            '<div style="text-align:center;"><h3>Manage Quotation</h3></div>'
-                        )
-                        .append(
-                            '<div style="text-align:center;"><h4>amoriotech.com</h4></div>'
-                        );
+                        .prepend('<div style="text-align:center;"><h3>Generated Pay Slips List</h3></div>');
+
                     $(win.document.body).find('table')
                         .addClass('compact')
                         .css('font-size', 'inherit');
+
                     var rows = $(win.document.body).find('table tbody tr');
                     rows.each(function() {
                         if ($(this).find('td').length === 0) {
                             $(this).remove();
                         }
                     });
-                    $(win.document.body).find('div:last-child')
-                        .css('page-break-after', 'auto');
-                    $(win.document.body)
-                        .css('margin', '0')
-                        .css('padding', '0');
+
+                    var totalAmount = 0;
+                    var totalOvertime = 0;
+                    var totalSalesCommission = 0;
+
+                    $(win.document.body).find('table tbody tr').each(function() {
+                        var amount = parseFloat($(this).find('td:eq(5)').text()) || 0; 
+                        var overtime = parseFloat($(this).find('td:eq(6)').text()) || 0; 
+                        var salesCommission = parseFloat($(this).find('td:eq(7)').text()) || 0;
+
+                        totalAmount += amount;
+                        totalOvertime += overtime;
+                        totalSalesCommission += salesCommission;
+                    });
+
+                    $(win.document.body).find('table tbody').append(
+                        '<tr>' +
+                            '<th colspan="5" style="text-align:right; font-weight: bold;">Total</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + totalAmount.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + totalOvertime.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + totalSalesCommission.toFixed(2) + '</th>' +
+                        '</tr>'
+                    );
+
+                    $(win.document.body).find('div:last-child').css('page-break-after', 'auto');
                 }
             },
+
             {
                "extend": "colvis",
                "className": "btn-sm"

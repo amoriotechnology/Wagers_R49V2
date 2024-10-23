@@ -540,6 +540,7 @@ public function state_tax_report($limit, $start, $orderField, $orderDirection, $
         $this->db->or_like("c.middle_name", $search);
         $this->db->or_like("c.employee_tax", $search);
         $this->db->like("d.month", $search);
+        $this->db->like("d.cheque_date", $search);
         $this->db->group_end();
     }
     if ($taxname) {
@@ -1469,13 +1470,19 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
+            $this->db->or_like("a.month", $search);
+            $this->db->or_like("a.cheque_date", $search);
+            $this->db->or_like("b.f_tax", $search);
+            $this->db->or_like("b.s_tax", $search);
+            $this->db->or_like("b.m_tax", $search);
+            $this->db->or_like("b.u_tax", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
         $this->db->limit($limit, $offset);
         $this->db->order_by($orderField, $orderDirection);
         $query = $this->db->get();
-      //   echo $this->db->last_query(); die();
+        // echo $this->db->last_query(); die();
         if ($query === false) {
             return false;
         }
@@ -1508,6 +1515,12 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
+            $this->db->or_like("a.month", $search);
+            $this->db->or_like("a.cheque_date", $search);
+            $this->db->or_like("b.f_tax", $search);
+            $this->db->or_like("b.s_tax", $search);
+            $this->db->or_like("b.m_tax", $search);
+            $this->db->or_like("b.u_tax", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
@@ -1545,6 +1558,12 @@ public function getPaginatedSocialTaxSummary($limit, $offset, $orderField, $orde
         $this->db->or_like("c.last_name", $search);
         $this->db->or_like("c.middle_name", $search);
         $this->db->or_like("c.employee_tax", $search);
+        $this->db->or_like("b.total_amount", $search);
+        $this->db->or_like("b.net_amount", $search);
+        $this->db->or_like("b.f_tax", $search);
+        $this->db->or_like("b.s_tax", $search);
+        $this->db->or_like("b.m_tax", $search);
+        $this->db->or_like("b.u_tax", $search);
         $this->db->group_end();
     }
     $this->db->limit($limit, $offset);
@@ -1762,12 +1781,14 @@ public function state_tax(){
 
 
 
-    public function employee_data_get() {
-        $this->db->select("*");
-        $this->db->from('employee_history');
-        $this->db->where('create_by', $this->session->userdata('user_id'));
+    public function employee_data_get() 
+    {
+        $this->db->select("ti.*, eh.*");
+        $this->db->from('timesheet_info ti');
+        $this->db->join('employee_history eh', 'eh.id = ti.templ_name');
+        $this->db->where('ti.create_by', $this->session->userdata('user_id'));
+        $this->db->group_by('eh.id');
         $query = $this->db->get();    
-        // echo $this->db->last_query();    
         return $query->result_array();
     }
 
@@ -2985,25 +3006,89 @@ public function delete_tax($tax = null, $state) {
 
 
 
-   public function employee_list(){
+   public function employee_list()
+   {
+        $this->db->select('*');
+        $this->db->from('employee_history');
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+        $query = $this->db->get();
 
-$this->db->select('*');
-     $this->db->from('employee_history');
-     $this->db->where('create_by',$this->session->userdata('user_id'));
-     
-     
-    //  $this->db->select('a.*,b.designation');
-    //  $this->db->from('employee_history a');
-    //  $this->db->join('designation b','a.designation = b.id');
-    //  $this->db->where('a.create_by',$this->session->userdata('user_id'));
-    //  $this->db->order_by('a.designation', 'DESC');
-     $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+           return $query->result_array();
+        }
+        return false;
+    }
 
-     if ($query->num_rows() > 0) {
-       return $query->result_array();
-     }
-     return false;
-}
+    // Get Employee List Data
+    public function getEmployeeListdata($limit, $offset, $orderField, $orderDirection, $search)
+    {
+        $this->db->select('*');
+        $this->db->from('employee_history');
+        $orderDirection = (strtoupper($orderDirection) === 'DESC') ? 'DESC' : 'ASC';
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like("first_name", $search);
+            $this->db->or_like("middle_name", $search);
+            $this->db->or_like("last_name", $search);
+            $this->db->or_like("designation", $search);
+            $this->db->or_like("phone", $search);
+            $this->db->or_like("email", $search);
+            $this->db->or_like("blood_group", $search);
+            $this->db->or_like("social_security_number", $search);
+            $this->db->or_like("routing_number", $search);
+            $this->db->or_like("employee_tax", $search);
+            $this->db->group_end();
+        }
+
+        $this->db->where('create_by', $this->session->userdata('user_id'));
+        
+        $this->db->order_by($orderField, $orderDirection); 
+        $this->db->order_by('id', 'DESC');
+        $this->db->limit($limit, $offset);
+        
+        $query = $this->db->get();
+        
+        if ($query === false) {
+            return [];
+        }
+        
+        return $query->result_array();
+    }
+
+
+    // Get Total Employee List Data
+    public function getTotalEmployeeListdata($search)
+    {
+        $this->db->select('*');
+        $this->db->from('employee_history');
+
+        if (!empty($search)) {
+            $this->db->like("first_name", $search);
+            $this->db->or_like("middle_name", $search);
+            $this->db->or_like("last_name", $search);
+            $this->db->or_like("designation", $search);
+            $this->db->or_like("phone", $search);
+            $this->db->or_like("email", $search);
+            $this->db->or_like("blood_group", $search);
+            $this->db->or_like("social_security_number", $search);
+            $this->db->or_like("routing_number", $search);
+            $this->db->or_like("employee_tax", $search);
+            $this->db->or_like("employee_tax", $search);
+            $this->db->group_end();
+        }
+        $this->db->where('create_by',$this->session->userdata('user_id'));
+        $this->db->order_by('id', 'DESC');
+
+        $query = $this->db->get();
+
+        if ($query === false) {
+            return false;
+        }
+        return $query->num_rows();
+    }
+
+
 
 
 
@@ -3138,10 +3223,8 @@ public function getTaxdetailsdata($tax){
     }
     //delete employee
 
-       public function delete_employee($id) {
-
-            // echo $id; die();
-
+    public function delete_employee($id) 
+    {
         $this->db->where('id', $id);
 
         $this->db->delete('employee_history');
@@ -3155,7 +3238,27 @@ public function getTaxdetailsdata($tax){
         $this->db->delete('employee_type');
 
         return true;
+    }
 
+    // Delete Timesheet Data - Madhu
+    public function deleteTimesheetdata($id) 
+    {
+        $this->db->where('timesheet_id',$id);
+        $this->db->delete('timesheet_info');
+
+        $this->db->where('timesheet_id',$id);
+        $this->db->delete('timesheet_info_details');
+
+        $this->db->where('time_sheet_id',$id);
+        $this->db->delete('tax_history');
+
+        $this->db->where('timesheet_id',$id);
+        $this->db->delete('info_payslip');
+        
+        $this->db->where('time_sheet_id',$id);
+        $this->db->delete('tax_history_employer');
+
+        return true;
     }
 
 
@@ -4228,7 +4331,7 @@ public function getPaginatedpayslip($limit, $offset, $orderField, $orderDirectio
     }
     
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
 
     $query = $this->db->get();
 
@@ -4276,7 +4379,7 @@ public function getPaginatedscchoiceyes($limit, $offset, $orderField, $orderDire
     $this->db->where('c.choice', 'Yes');
     $this->db->where('a.payroll_type', 'Sales Partner');
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
     $query = $this->db->get();
 
     if ($query === false) {
@@ -4284,6 +4387,7 @@ public function getPaginatedscchoiceyes($limit, $offset, $orderField, $orderDire
     }
     return $query->result_array();
 }
+
 
 
 public function getPaginatedscpayslip($limit, $offset, $orderField, $orderDirection, $search, $date = null, $emp_name = 'All')
@@ -4325,7 +4429,7 @@ public function getPaginatedscpayslip($limit, $offset, $orderField, $orderDirect
     $this->db->where('b.choice', 'No');
 
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
     $query = $this->db->get();
     
     if ($query === false) {
@@ -4378,7 +4482,7 @@ public function getTotalpayslip($search, $date, $emp_name = 'All')
     }
 
     $this->db->limit($limit, $offset);
-    $this->db->order_by($orderField, $orderDirection);
+    $this->db->order_by('a.id', 'desc'); 
 
     $query = $this->db->get();
 
@@ -4388,6 +4492,84 @@ public function getTotalpayslip($search, $date, $emp_name = 'All')
     return $query->num_rows();
 }
 
+
+// Mangetime Sheet Data - Madhu
+public function getPaginatedmanagetimesheetlist($limit, $offset, $orderField, $orderDirection, $search, $emp_name = 'All')
+{
+    $this->db->select('a.*,b.*');
+
+    if ($emp_name !== 'All') {
+        $trimmed_emp_name = trim($emp_name);
+        $this->db->group_start();
+        $this->db->like("TRIM(CONCAT_WS(' ', b.first_name, b.middle_name, b.last_name))", $trimmed_emp_name);
+        $this->db->or_like("TRIM(CONCAT_WS(' ', b.first_name, b.last_name))", $trimmed_emp_name);
+        $this->db->group_end();
+    }
+
+    $this->db->from('timesheet_info a');
+    $this->db->join('employee_history b' , 'a.templ_name = b.id');
+
+    if (!empty($search)) {
+        $this->db->group_start();
+        $this->db->or_like("b.first_name", $search);
+        $this->db->or_like("b.last_name", $search);
+        $this->db->or_like("b.middle_name", $search);
+        $this->db->or_like("a.payroll_type", $search);
+        $this->db->or_like("a.total_hours", $search);
+        $this->db->or_like("a.month", $search);
+        $this->db->group_end();
+    }
+
+    $this->db->where('a.create_by',$this->session->userdata('user_id'));
+
+    $this->db->limit($limit, $offset);
+    $this->db->order_by('a.id', 'desc'); 
+    $query = $this->db->get();
+
+    if ($query === false) {
+        return [];
+    }
+    return $query->result_array();
+}
+
+
+public function getTotalmanagetimesheetlist($search, $emp_name = 'All')
+{
+    $this->db->select('a.*,b.*');
+
+    if ($emp_name !== 'All') {
+        $trimmed_emp_name = trim($emp_name);
+        $this->db->group_start();
+        $this->db->like("TRIM(CONCAT_WS(' ', b.first_name, b.middle_name, b.last_name))", $trimmed_emp_name);
+        $this->db->or_like("TRIM(CONCAT_WS(' ', b.first_name, b.last_name))", $trimmed_emp_name);
+        $this->db->group_end();
+    }
+
+    $this->db->from('timesheet_info a');
+    $this->db->join('employee_history b' , 'a.templ_name = b.id');
+
+    if (!empty($search)) {
+        $this->db->group_start();
+        $this->db->or_like("b.first_name", $search);
+        $this->db->or_like("b.last_name", $search);
+        $this->db->or_like("b.middle_name", $search);
+        $this->db->or_like("a.payroll_type", $search);
+        $this->db->or_like("a.total_hours", $search);
+        $this->db->or_like("a.month", $search);
+        $this->db->group_end();
+    }
+
+    $this->db->where('a.create_by',$this->session->userdata('user_id'));
+
+    $this->db->limit($limit, $offset);
+    $this->db->order_by('a.id', 'desc'); 
+    $query = $this->db->get();
+
+    if ($query === false) {
+        return false;
+    }
+    return $query->num_rows();
+}
 
 
 }

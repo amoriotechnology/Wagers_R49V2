@@ -203,15 +203,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "csv",
-                "title": "Report",
-                "className": "btn-sm",
-                "exportOptions": {
-                    "columns": ':visible'
-                }
-            },
-            {
-                "extend": "pdf",
-                "title": "Report",
+                "text": "Excel",
+                "title": "Federal Income Tax Report",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':visible'
@@ -220,6 +213,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 "extend": "print",
                 "className": "btn-sm",
+                "text": "Pdf / Print",
+                "title": '',  
                 "exportOptions": {
                     "columns": ':visible'
                 },
@@ -227,10 +222,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                     $(win.document.body)
                         .css('font-size', '10pt')
                         .prepend(
-                            '<div style="text-align:center;"><h3>Manage Quotation</h3></div>'
-                        )
-                        .append(
-                            '<div style="text-align:center;"><h4>amoriotech.com</h4></div>'
+                            '<div style="text-align:center;"><h3>Federal Income Tax</h3></div>'
                         );
                     $(win.document.body).find('table')
                         .addClass('compact')
@@ -241,6 +233,19 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                             $(this).remove();
                         }
                     });
+
+                    var totalAmount = 0;
+
+                    $(win.document.body).find('table tbody tr').each(function() {
+                        var amount = parseFloat($(this).find('td:eq(6)').text()) || 0; 
+                        totalAmount += amount;
+                    });
+                    $(win.document.body).find('table tbody').append(
+                        '<tr>' +
+                            '<th colspan="6" style="text-align:right; font-weight: bold;">Total</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + totalAmount.toFixed(2) + '</th>' +
+                        '</tr>'
+                    );
                     $(win.document.body).find('div:last-child')
                         .css('page-break-after', 'auto');
                     $(win.document.body)

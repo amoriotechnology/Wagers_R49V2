@@ -70,47 +70,48 @@
                <div class="error_display mb-2"></div>
                <div class="panel panel-bd lobidrag">
                   <div class="panel-body" style="border: 3px solid #D7D4D6;">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" cellspacing="0" width="100%" id="socialsecuritytax_list">
-                            <thead class="sortableTable">
-                                <tr class="sortableTable__header btnclr">
-                                    <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px; text-align:center; "> <?php echo 'S.NO'?> </th>
-                                    <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 300px;"> <?php echo 'Employee Name'?> </th>
-                                    <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 150px; "> <?php echo 'Gross'?> </th>
-                                    <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 150px; "> <?php echo 'Net'?> </th>
-                                    <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Federal Income Tax')?> </th>
-                                    <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Social Security Tax')?> </th>
-                                    <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Medicare Tax')?> </th>
-                                    <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Unemployment Tax')?> </th>
-                                </tr>
-                                <tr class="btnclr" >
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
-                                    <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr class="btnclr">
-                                    <th colspan="2" style="text-align: end;">Total</th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                    <th class="text-center"></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                     </div>
+                     <table class="table table-bordered" cellspacing="0" width="100%" id="socialsecuritytax_list">
+                        <thead class="sortableTable">
+                            <tr class="sortableTable__header btnclr">
+                                <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px; text-align:center; "> <?php echo 'S.NO'?> </th>
+                                <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 300px;"> <?php echo 'Employee Name'?> </th>
+                                <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 150px; "> <?php echo 'Gross'?> </th>
+
+                                           <th rowspan="2" class="3 value" data-col="3" style="text-align:center;width: 150px; "> <?php echo 'Net'?> </th>
+                               
+                                <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Federal Income Tax')?> </th>
+                                <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Social Security Tax')?> </th>
+                                <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Medicare Tax')?> </th>
+                                <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Unemployment Tax')?> </th>
+                          
+                            </tr>
+                            <tr class="btnclr" >
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employee Contribution')?> </th>
+                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"> <?php echo ('Employer Contribution')?> </th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                             <tr class="btnclr">
+        <th colspan="2" style="text-align: end;">Total</th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+    </tr>
+                        </tfoot>
+                     </table>
                   </div>
                </div>     
             </div>
@@ -158,8 +159,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                 return json.data;
             }
         },
-        "columns": [
-            { "data": "table_id" },
+         "columns": [
+       { "data": "table_id" },
             { "data": "first_name" },
             { "data": "gross" },
             { "data": "net" },
@@ -171,8 +172,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             { "data": "medicare_employer" },
             { "data": "unemployment_employee" },
             { "data": "unemployment_employer" },
-        ],
-
+         ],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 11],
@@ -182,13 +182,21 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             "initComplete": function() {
                 this.api().columns().every(function() {
                     var column = this;
-                    var select = $('<select><option value=""></option></select>').appendTo($(column.footer()).empty())
+                    var select = $(
+                            '<select><option value=""></option></select>'
+                        )
+                        .appendTo($(column.footer()).empty())
                         .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            var val = $.fn.dataTable.util
+                                .escapeRegex(
+                                    $(this).val()
+                                );
+                            column.search(val ? '^' + val + '$' :
+                                '', true, false).draw();
                         });
                     column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
+                        select.append('<option value="' + d +
+                            '">' + d + '</option>')
                     });
                 });
             },
@@ -250,61 +258,106 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "csv",
-                "title": "Report",
+                "text": "Excel",
+                "title": "Federal Overall Summary Report",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':visible'
                 }
             },
             {
-                "extend": "pdf",
-                "title": "Report",
+                "extend": "print",
                 "className": "btn-sm",
+                "text": "Pdf / Print",
+                "title": "",
                 "exportOptions": {
                     "columns": ':visible'
+                },
+                "customize": function(win) {
+                   $(win.document.body).css('font-size', '10pt').prepend('<div style="text-align:center;"><h3>Federal Overall Summary</h3></div>');
+                    
+                    $(win.document.body).css({
+                        'margin': '0',
+                        'padding': '0',
+                        'page-break-after': 'always'
+                    });
+
+                    var style = '<style>@media print { @page { size: landscape; } }</style>';
+                    $(win.document.head).append(style);
+                    
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                    var rows = $(win.document.body).find('table tbody tr');
+                    rows.each(function() {
+                        if ($(this).find('td').length === 0) {
+                            $(this).remove();
+                        }
+                    });
+
+                    var grossTotal = 0;
+                    var netTotal = 0;
+                    var federalemployeeContributionTotal = 0;
+                    var federalemployerContributionTotal = 0;
+                    var socialemployeeContributionTotal = 0;
+                    var socialemployerContributionTotal = 0;
+                    var medicareemployeeContributionTotal = 0;
+                    var medicareemployerContributionTotal = 0;
+                    var unemploymentemployeeContributionTotal = 0;
+                    var unemploymentemployerContributionTotal = 0;
+
+                    $(win.document.body).find('table tbody tr').each(function() {
+                        var gross = parseFloat($(this).find('td:eq(2)').text().replace(/,/g, '')) || 0; 
+                        var net = parseFloat($(this).find('td:eq(3)').text().replace(/,/g, '')) || 0;
+                        var FEmp = parseFloat($(this).find('td:eq(4)').text().replace(/,/g, '')) || 0;
+                        var FEmpr = parseFloat($(this).find('td:eq(5)').text().replace(/,/g, '')) || 0;
+                        var SEmp = parseFloat($(this).find('td:eq(6)').text().replace(/,/g, '')) || 0;
+                        var SEmpr = parseFloat($(this).find('td:eq(7)').text().replace(/,/g, '')) || 0;
+                        var MEmp = parseFloat($(this).find('td:eq(8)').text().replace(/,/g, '')) || 0;
+                        var MEmpr = parseFloat($(this).find('td:eq(9)').text().replace(/,/g, '')) || 0;
+                        var UnEmp = parseFloat($(this).find('td:eq(10)').text().replace(/,/g, '')) || 0;
+                        var UnEmpr = parseFloat($(this).find('td:eq(11)').text().replace(/,/g, '')) || 0;
+                        grossTotal += gross;
+                        netTotal += net;
+                        federalemployeeContributionTotal += FEmp;
+                        federalemployerContributionTotal += FEmpr;
+                        socialemployeeContributionTotal += SEmp;
+                        socialemployerContributionTotal += SEmpr;
+                        medicareemployeeContributionTotal += MEmp;
+                        medicareemployerContributionTotal += MEmpr;
+                        unemploymentemployeeContributionTotal += UnEmp;
+                        unemploymentemployerContributionTotal += UnEmpr;
+                    });
+                    
+                    $(win.document.body).find('table tbody').append(
+                        '<tr>' +
+                            '<th colspan="2" style="text-align:right; font-weight: bold;">Total</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + grossTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + netTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + federalemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + federalemployerContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + socialemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + socialemployerContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + medicareemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + medicareemployerContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + unemploymentemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + unemploymentemployerContributionTotal.toFixed(2) + '</th>' +
+                        '</tr>'
+                    );
+
+                    $(win.document.body).find('div:last-child')
+                        .css('page-break-after', 'auto');
+                    $(win.document.body)
+                        .css('margin', '0')
+                        .css('padding', '0');
                 }
             },
-           {
-    "extend": "print",
-    "className": "btn-sm",
-    "exportOptions": {
-        "columns": ':visible'
-    },
-    "customize": function(win) {
-        // Hide specific elements in the print view
-        $(win.document.body).find('h1, h2, h3, h4, h5, h6, #printableArea').hide(); 
-
-        // Get the pay range from the date range picker
-        var payRange = $('#daterangepicker-field').val() !== '' ? "Pay Range : " + $('#daterangepicker-field').val() : "Pay Range : Not specified";
-
-        $(win.document.body).css('font-size', '10pt').prepend(
-                '<div style="text-align:center;"><h3>Federal Overall Summary</h3><br/><div id="date_period_range" style="text-align: center;font-weight: bolder;font-size: x-large;color: #337ab7;">' + payRange + '</div><br/></div>' 
-            ).append(
-                '<div style="text-align:center;"></div>' 
-            );
-
-        // Clone the footer to the print window
-        var footerHtml = $(win.document.body).find('table tfoot').html();
-        $(win.document.body).find('table').append('<tfoot>' + footerHtml + '</tfoot>');
-        $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
-
-        var rows = $(win.document.body).find('table tbody tr');
-        rows.each(function() {
-            if ($(this).find('td').length === 0) {
-                $(this).remove();
+            {
+               "extend": "colvis",
+               "className": "btn-sm"
             }
-        });
-
-        $(win.document.body).find('div:last-child').css('page-break-after', 'auto');
-        $(win.document.body).css('margin', '0').css('padding', '0');
-    }
-},
-    {
-        "extend": "colvis",
-        "className": "btn-sm"
-    }
-    ]
-});
+        ]
+    });
     
     $('.employee_name').on('change', function() {
         federalincomeDataTable.ajax.reload();
