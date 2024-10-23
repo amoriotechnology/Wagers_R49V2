@@ -7547,12 +7547,6 @@ $this->form_validation->set_rules('in_department', 'In Department', 'required');
 
 
 
-
-
-
-
-
-
 public function formw3Form()
 {
     $CI = & get_instance();
@@ -7610,13 +7604,14 @@ public function sc_cnt()
 
 public function form940Form()
 {
-    $CI = & get_instance();
-    $this->load->model('Hrm_model');
-    $data['get_cominfo'] = $this->Hrm_model->get_company_info();
-    $data['get_cdata'] = $this->Hrm_model->get_employer_federaltax();
-    $data['get_sc_info']  = $this->Hrm_model->get_sc_info();
-    $data['get_paytotal'] = $this->Hrm_model->get_paytotal();
-    $data['get_userlist'] = $CI->db->select('*')->from('users')->where('user_id',$this->session->userdata('user_id'))->get()->result_array();
+  $CI = & get_instance();
+  $this->load->model('Hrm_model');
+  
+  $data['get_cominfo'] = $this->Hrm_model->get_company_info();
+  $data['get_cdata'] = $this->Hrm_model->get_employer_federaltax();
+  $data['get_sc_info']  = $this->Hrm_model->get_sc_info();
+  $data['get_paytotal'] = $this->Hrm_model->get_paytotal();
+  $data['get_userlist'] = $this->Hrm_model->getDatas('users', '*', ['user_id' => $this->session->userdata('user_id')]);
 //     $data['amountGreaterThan'] = $CI->db
 //     ->select('SUM(total_amount) AS totalAmount')
 //     ->from('info_payslip')
@@ -7633,40 +7628,39 @@ public function form940Form()
 //   }
   
   $data['amountGreaterThan'] = $this->Hrm_model->f940_excess_emp();
-$totalAmount = 0;
-// Check if the query returned any result before accessing it
-if ($data['amountGreaterThan']) {
-    foreach ($data['amountGreaterThan'] as $row) {
+  $totalAmount = 0;
+  // Check if the query returned any result before accessing it
+  if ($data['amountGreaterThan']) {
+      foreach ($data['amountGreaterThan'] as $row) {
         // Accessing each row of the result and its 'totalAmount' value
         $totalAmount += $row['totalAmount'];
+      }
+      $value = $totalAmount / 2;
+    
+    if( !empty($value) ) {
+      $final_amount = $value - 7000;
+    }else{
+      $final_amount = 0 ;
     }
-    $value = $totalAmount / 2;
-   
-   if( !empty($value) ){
-    $final_amount = $value - 7000;
-   }else{
-    $final_amount = 0 ;
-   }
- 
+  
     if (!empty($final_amount)) {
         $totalAmount = $final_amount;
     }
-}
+  }
 
-   $data = array(
-      'title' => '940 Form',
-      'get_cominfo' => $data['get_cominfo'],
-      'get_cdata' => $data['get_cdata'], 
-      'get_paytotal' => $data['get_paytotal'], 
-      'get_userlist' => $data['get_userlist'], 
-      'amountGreaterThan' => $data['amountGreaterThan'], 
-      'get_sc_info' => $data['get_sc_info'],
-       'amt'  =>  $totalAmount
-
-    );
+  $data = array(
+    'title' => '940 Form',
+    'get_cominfo' => $data['get_cominfo'],
+    'get_cdata' => $data['get_cdata'], 
+    'get_paytotal' => $data['get_paytotal'], 
+    'get_userlist' => $data['get_userlist'], 
+    'amountGreaterThan' => $data['amountGreaterThan'], 
+    'get_sc_info' => $data['get_sc_info'],
+    'amt'  =>  $totalAmount
+  );
     
-     $content = $CI->parser->parse('hr/f940', $data, true);
-    $this->template->full_admin_html_view($content);
+  $content = $CI->parser->parse('hr/f940', $data, true);
+  $this->template->full_admin_html_view($content);
 }
 
 
