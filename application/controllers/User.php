@@ -28,29 +28,23 @@ class User extends CI_Controller {
    public function managecompany()
    {   
         $CI = & get_instance();
-
         $CI->load->model('Companies');
-
         $cl=$CI->Companies->company_list();
-
-        // print_r($cl); die();
 
         foreach ($cl as $key => $value) {
             $id = $value['company_id'];
         }
-        
         // $notifyFlag = $this->notificationEmail(false);
-        $notifyFlag = $this->notificationEmail($id);
+        // $notifyFlag = $this->notificationEmail($id);
 
-        $data['company_info']=$cl;
-
+        $data['company_info'] = $cl;
         $content = $this->load->view('users/mange_company', $data, true);
-
         $this->template->full_admin_html_view($content);
     }
-    #==============User page load============#
     
-    public function notificationEmail($id = null)
+    
+    #==============User page load============#
+        public function notificationEmail($id = null)
    {    
         $CI = & get_instance();
         $this->auth->check_admin_auth();
@@ -183,11 +177,10 @@ class User extends CI_Controller {
     }
     
 
-    public function index() {
-        $content = $this->lusers->index();
+    public function index($cid = "") {
+        $content = $this->lusers->index($cid);
         $this->template->full_admin_html_view($content);
     }
-
 
     public function insert_admin_user()
     {
@@ -526,124 +519,158 @@ public function company_update_branch($company_id){
 }
 
 public function company_insert(){
- if ($_FILES['image']['name']) {
+    $CI = & get_instance();
+    $CI->load->model('Userm');
+
+    $cmpy_id = $this->input->post('cmpy_id');
+    $logo = "";
+    if ($_FILES['image']['name']) {
         $config['upload_path']    = 'my-assets/image/logo/';
         $config['allowed_types']  = 'gif|jpg|png|jpeg|JPEG|GIF|JPG|PNG';
         $config['encrypt_name']   = TRUE;
-            $this->load->library('upload', $config);
-            if (!$this->upload->do_upload('image')) {
-                $error = array('error' => $this->upload->display_errors());
-                $this->session->set_userdata(array('error_message' => $this->upload->display_errors()));
-                redirect(base_url('Admin_dashboard/edit_profile'));
-            } else {
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('image')) {
+            $error = array('error' => $this->upload->display_errors());
+            $this->session->set_userdata(array('error_message' => $this->upload->display_errors()));
+            redirect(base_url('Admin_dashboard/edit_profile'));
+        } else {
             $data = $this->upload->data();
-            $logo = $config['upload_path'].$data['file_name'];
+            $logoname = $config['upload_path'].$data['file_name'];
             $config['image_library']  = 'gd2';
-            $config['source_image']   = $logo;
+            $config['source_image']   = $logoname;
             $config['create_thumb']   = false;
             $config['maintain_ratio'] = TRUE;
             $config['width']          = 200;
             $config['height']         = 200;
             $this->load->library('image_lib', $config);
             $this->image_lib->resize();
-            $logo =  $logo;
-            }
+            $logo =  $logoname;
         }
-            // insert Company information///////////////
-            $uid=$_SESSION['user_id'];
-            $data = array(
-                'company_name'    =>$this->input->post('company_name',true),
-                'email' => $this->input->post('email',true),
-                'c_city'      => $this->input->post('c_city',true),
-                'c_state'      => $this->input->post('c_state',true),
-                'address'      => $this->input->post('address',true),
-                'mobile'   => $this->input->post('mobile',true),
-                'website'  => $this->input->post('website',true),
-                'Bank_Name'      => $this->input->post('Bank_Name',true),
-                'Account_Number'      => $this->input->post('Account_Number',true),
-                'Bank_Routing_Number'      => $this->input->post('Bank_Routing_Number',true),
-                'Bank_Address'      => $this->input->post('Bank_Address',true),
-                'Federal_Pin_Number'      => $this->input->post('Federal_Pin_Number',true),
-                'user_name'      => $this->input->post('user_name',true),
-                'password'      => $this->input->post('password',true),
-                'pin_number'      => $this->input->post('pin_number',true),
-                // 'user_name_st'      => $this->input->post('user_name_st',true),
-                // 'password_st'      => $this->input->post('password_st',true),
-                // 'pin_number_st'      => $this->input->post('pin_number_st',true),
-                // 'user_name_lctx'      => $this->input->post('user_name_lctx',true),
-                // 'password_lctx'      => $this->input->post('password_lctx',true),
-                // 'pin_number_lctx'      => $this->input->post('pin_number_lctx',true),
-                // 'user_name_sstx'      => $this->input->post('user_name_sstx',true),
-                // 'password_sstx'      => $this->input->post('password_sstx',true),
-                // 'pin_number_sstx'      => $this->input->post('pin_number_sstx',true),
-                // 'url'      => $this->input->post('url',true),
-                // 'url1'      => $this->input->post('url1',true),
-                // 'url'         =>$url[$i],
-                // 'url_st'         =>$url_st[$i],
-                // 'url_lctx'         =>$url_lctx[$i],
-                // 'url_sstx'         =>$url_sstx[$i],
-                // 'user_name'         =>$user_name[$i],
-                // 'password'         =>$password[$i],
-                // 'pin_number'         =>$pin_number[$i],
-                // 'user_name_st'         =>$user_name_st[$i],
-                // 'password_st'         =>$password_st[$i],
-                // 'pin_number_st'         =>$pin_number_st[$i],
-                // 'user_name_lctx'         =>$user_name_lctx[$i],
-                // 'password_lctx'         =>$password_lctx[$i],
-                // 'pin_number_lctx'         =>$pin_number_lctx[$i],
-                // 'user_name_sstx'         =>$user_name_sstx[$i],
-                // 'password_sstx'         =>$password_sstx[$i],
-                // 'pin_number_sstx'         =>$pin_number_sstx[$i],
-                // 'st_tax_id'      => $this->input->post('statetx',true),
-                // 'lc_tax_id'      => $this->input->post('localtx',true),
-                // 'State_Sales_Tax_Number'      => $this->input->post('State_Sales_Tax_Number',true),
-                'logo'       => $logo,
-                'create_by'     => $uid,
-                'status'     => 0
-            );
-             $this->db->insert('company_information',$data);
-              $cid= $this->db->insert_id();
-             $data1 = array(
-                'create_by'     => $cid,
-             );
-             $this->db->insert('web_setting',$data1);
-             $data2 = array(
-                'create_by'     => $cid,
-                 'uid'     => $cid
-             );
-             $this->db->insert('invoice_design',$data2);
-             $num_str = sprintf("%03d", mt_rand(1, 999));
-     $data = array(
-               'unique_id'  =>   "AD".$cid.$num_str,
-                'create_by'     => $uid,
-                'user_id'     => $cid
-            );
-             $insert=$this->db->insert('users',$data);
-             $data = array(
-                'username'    =>$this->input->post('username',true),
-                'password' => md5("gef" . $this->input->post('password',true)),
-               'unique_id'  =>   "AD".$cid.$num_str,
-                'user_type'      => 1+1,
-                'u_type'      => 1+1,
-                'security_code'   => $this->input->post('mobile',true),
-                'email_id'  => $this->input->post('user_email',true),
-                'status'       =>0,
-                'cid'     => $cid,
-                'user_id' =>$cid,
-                'create_by'     => $uid,
-            );
-             $insert=$this->db->insert('user_login',$data);
-    $data2 = array(
-                'cid'     => $cid,
-                'user_id' =>$cid,
-                'create_by'     => $uid,
-            );
-            $insert=$this->db->insert('payslip_invoice_design',$data2);
-             if($insert)
-             {
-                redirect('user/managecompany');
-             }
+    } else {
+        $logo = $this->input->post('logo_image');
     }
+    // insert Company information///////////////
+    $uid=$_SESSION['user_id'];
+    $cmpy_name = $this->input->post('company_name',true);
+    $mobile = $this->input->post('mobile',true);
+    $uname = $this->input->post('username',true);
+
+    $data = array(
+        'company_name'  => $cmpy_name,
+        'email' => $this->input->post('email',true),
+        'c_city'      => $this->input->post('c_city',true),
+        'c_state'      => $this->input->post('c_state',true),
+        'c_zipcode'      => $this->input->post('zipcode',true),
+        'address'      => $this->input->post('address',true),
+        'mobile'   => $mobile,
+        'website'  => $this->input->post('website',true),
+        'Bank_Name'      => $this->input->post('Bank_Name',true),
+        'Account_Number'      => $this->input->post('Account_Number',true),
+        'Bank_Routing_Number'      => $this->input->post('Bank_Routing_Number',true),
+        'Bank_Address'      => $this->input->post('Bank_Address',true),
+        'Federal_Pin_Number'      => $this->input->post('Federal_Pin_Number',true),
+        'user_name'      => $this->input->post('user_name',true),
+        'password'      => $this->input->post('password',true),
+        'pin_number'      => $this->input->post('pin_number',true),
+        'currency'      => $this->input->post('currency',true),
+        'subscription_fees'      => $this->input->post('subscription_fees',true),
+        'mail'      => $this->input->post('mail',true),
+        'due_date'      => $this->input->post('due_date',true),
+        'payment_reminder_date'      => $this->input->post('payment_reminder_date',true),
+
+        // 'user_name_st'      => $this->input->post('user_name_st',true),
+        // 'password_st'      => $this->input->post('password_st',true),
+        // 'pin_number_st'      => $this->input->post('pin_number_st',true),
+        // 'user_name_lctx'      => $this->input->post('user_name_lctx',true),
+        // 'password_lctx'      => $this->input->post('password_lctx',true),
+        // 'pin_number_lctx'      => $this->input->post('pin_number_lctx',true),
+        // 'user_name_sstx'      => $this->input->post('user_name_sstx',true),
+        // 'password_sstx'      => $this->input->post('password_sstx',true),
+        // 'pin_number_sstx'      => $this->input->post('pin_number_sstx',true),
+        // 'url'      => $this->input->post('url',true),
+        // 'url1'      => $this->input->post('url1',true),
+        // 'url'         =>$url[$i],
+        // 'url_st'         =>$url_st[$i],
+        // 'url_lctx'         =>$url_lctx[$i],
+        // 'url_sstx'         =>$url_sstx[$i],
+        // 'user_name'         =>$user_name[$i],
+        // 'password'         =>$password[$i],
+        // 'pin_number'         =>$pin_number[$i],
+        // 'user_name_st'         =>$user_name_st[$i],
+        // 'password_st'         =>$password_st[$i],
+        // 'pin_number_st'         =>$pin_number_st[$i],
+        // 'user_name_lctx'         =>$user_name_lctx[$i],
+        // 'password_lctx'         =>$password_lctx[$i],
+        // 'pin_number_lctx'         =>$pin_number_lctx[$i],
+        // 'user_name_sstx'         =>$user_name_sstx[$i],
+        // 'password_sstx'         =>$password_sstx[$i],
+        // 'pin_number_sstx'         =>$pin_number_sstx[$i],
+        // 'st_tax_id'      => $this->input->post('statetx',true),
+        // 'lc_tax_id'      => $this->input->post('localtx',true),
+        // 'State_Sales_Tax_Number'      => $this->input->post('State_Sales_Tax_Number',true),
+        'logo'       => $logo,
+        'create_by'     => $uid,
+        'status'     => 0
+    );
+        
+    if(!empty($cmpy_id)) {
+        $cid= $cmpy_id;
+        $where = ['company_id' => $cid];
+        
+        $CI->Userm->updateData('company_information', $data, $where);
+       
+        $CI->Userm->updateData('users', ['create_by' => $uid, 'company_name' => $cmpy_name, 'first_name' => $uname, 'phone' => $mobile, 'userlogo' => $logo], ['user_id' => $cid]);
+
+        $user_data = [
+            'username'  => $uname,
+            'password' => md5("gef" . $this->input->post('password',true)),
+            'logo' => $logo,
+            'user_type'      => 1+1,
+            'u_type'      => 1+1,
+            'email_id'  => $this->input->post('user_email',true),
+            'create_by' => $uid,
+        ];
+
+        $CI->Userm->updateData('user_login', $user_data, ['user_id' => $cid]);
+
+        $CI->Userm->updateData('payslip_invoice_design', ['user_id' => $cid, 'create_by' => $uid], ['cid' => $cid]);
+
+    } else {
+        $this->db->insert('company_information', $data);
+        $cid= $this->db->insert_id();
+
+        $CI->Userm->insertData('web_setting', ['create_by' => $cid]);
+
+        $inv_data = ['create_by' => $cid, 'uid' => $cid];
+        $CI->Userm->insertData('invoice_design', $inv_data);
+
+        $num_str = sprintf("%03d", mt_rand(1, 999));
+        $users_data = ['unique_id' => "AD".$cid.$num_str, 'company_name' => $cmpy_name, 'first_name' => $uname, 'mobile' => $mobile, 'userlogo' => $logo, 'create_by' => $uid, 'user_id' => $cid];
+        $CI->Userm->insertData('users', $users_data);
+
+        $user_data = [
+            'username'  => $this->input->post('username',true),
+            'password' => md5("gef" . $this->input->post('password',true)),
+            'logo' => $logo,
+            'unique_id'  =>   "AD".$cid.$num_str,
+            'user_type'      => 1+1,
+            'u_type'      => 1+1,
+            'security_code'   => $this->input->post('mobile',true),
+            'email_id'  => $this->input->post('user_email',true),
+            'status'       =>0,
+            'cid'     => $cid,
+            'user_id' =>$cid,
+            'create_by' => $uid,
+        ];
+        $CI->Userm->insertData('user_login', $user_data);
+
+        $payslip_info = ['cid' => $cid, 'user_id' => $cid, 'create_by' => $uid];
+        $CI->Userm->insertData('payslip_invoice_design', $payslip_info);
+    }
+
+    redirect('user/managecompany');
+        
+}
 
 
 
