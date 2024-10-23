@@ -151,6 +151,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "u_utax" },
          { "data": "tu_utax" },
          ],
+        "order": [4, 'desc'],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 7],

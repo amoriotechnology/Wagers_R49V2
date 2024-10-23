@@ -926,7 +926,7 @@ public function overallSocialtaxIndexData()
     $fed_tax_emplr  = $this->Hrm_model->social_tax_employer($date, $emp_name);
     
     // Employee data aggregation
-    $data['employe'] = $this->Hrm_model->so_tax_report_employee($emp_name, $date, $status);
+    $data['employe'] = $this->Hrm_model->so_tax_report_employee($emp_name, $date);
     
     $aggregated_employe = [];
     if ($data['employe']) {
@@ -988,7 +988,7 @@ public function overallSocialtaxIndexData()
     // Prepare the final data array for the response
     $responseData = [];
     $i = $start + 1;
-    //print_r($items);die();
+    
     foreach ($items as $item) {
         $employeeId = $item["employee_id"];
         $mergedItem = $mergedArray[$employeeId] ?? [];
@@ -5729,7 +5729,7 @@ public function payslipIndexData()
       $limit          = $this->input->post("length");
       $start          = $this->input->post("start");
       $search         = $this->input->post("search")["value"];
-      $orderField     = $this->input->post("columns")[$this->input->post("order")[1]["column"]]["data"];
+      $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
       $orderDirection = $this->input->post("order")[0]["dir"];
       $date           = $this->input->post("payslip_date_search");
       $emp_name       = $this->input->post('employee_name');
@@ -5737,19 +5737,21 @@ public function payslipIndexData()
       $infodatainfo   = $this->Hrm_model->getPaginatedpayslip($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name);
       $sc_no_datainfo = $this->Hrm_model->getPaginatedscpayslip($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name);
       $sc_info_choice_yes = $this->Hrm_model->getPaginatedscchoiceyes($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name);
-      array_merge($items, $infodatainfom, $sc_no_datainfo, $sc_info_choice_yes);
+      array_merge($items, $infodatainfo, $sc_no_datainfo, $sc_info_choice_yes);
 
       $totalItems     = $this->Hrm_model->getTotalpayslip($search,$date,$emp_name);
       $data           = [];
       $i              = $start + 1;
       $edit           = "";
       $delete         = "";
+
       foreach ($items as $item) {
           $row = [
               "table_id"      => $i,
               "first_name"    => $item["first_name"] .' '. $item["middle_name"].' '. $item["last_name"],
               "job_title"  => $item["job_title"],
               "month"         => $item["month"],
+              "cheque_date"    => $item["cheque_date"],
               "total_hours" => (!empty($item['total_hours']) ? $item['total_hours'] : 0),
               "tot_amt"   => (!empty($item['extra_this_hour']) ? ($item['above_extra_sum'] + $item['extra_thisrate']) : $item['above_extra_sum']),
               "overtime"   => !empty($item['extra_this_hour']) ? $item['extra_this_hour'] : '0',

@@ -94,13 +94,19 @@ public function ad_user()
 
    
     #==============User add form===========#
-
-    public function index() {
+ 
+    public function index($cid = "") {
         $CI = & get_instance();
         $CI->load->model('Userm');
+        
         $data = array(
             'title' => display('manage_users')
         );
+        if(!empty($cid)) {
+            $data['cmpy_record'] = $CI->Userm->getDatas('company_information' , '*', ['company_id ' => $cid]);
+            $data['user_record'] = $CI->Userm->getDatas('user_login' , '*', ['cid ' => $cid]);
+        }
+
         $userForm = $CI->parser->parse('users/add_user_form', $data, true);
         return $userForm;
     }

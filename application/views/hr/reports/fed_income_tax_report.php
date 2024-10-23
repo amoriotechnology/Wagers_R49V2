@@ -145,6 +145,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "cheque_date" },
          { "data": "f_ftax" },
          ],
+        "order": [4, 'desc'],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 6],
