@@ -258,64 +258,100 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "csv",
-                "title": "Report",
+                "text": "Excel",
+                "title": "Federal Overall Summary Report",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':visible'
                 }
             },
             {
-                "extend": "pdf",
-                "title": "Report",
+                "extend": "print",
                 "className": "btn-sm",
+                "text": "Pdf / Print",
+                "title": "",
                 "exportOptions": {
                     "columns": ':visible'
+                },
+                "customize": function(win) {
+                   $(win.document.body).css('font-size', '10pt').prepend('<div style="text-align:center;"><h3>Federal Overall Summary</h3></div>');
+                    
+                    $(win.document.body).css({
+                        'margin': '0',
+                        'padding': '0',
+                        'page-break-after': 'always'
+                    });
+
+                    var style = '<style>@media print { @page { size: landscape; } }</style>';
+                    $(win.document.head).append(style);
+                    
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                    var rows = $(win.document.body).find('table tbody tr');
+                    rows.each(function() {
+                        if ($(this).find('td').length === 0) {
+                            $(this).remove();
+                        }
+                    });
+
+                    var grossTotal = 0;
+                    var netTotal = 0;
+                    var federalemployeeContributionTotal = 0;
+                    var federalemployerContributionTotal = 0;
+                    var socialemployeeContributionTotal = 0;
+                    var socialemployerContributionTotal = 0;
+                    var medicareemployeeContributionTotal = 0;
+                    var medicareemployerContributionTotal = 0;
+                    var unemploymentemployeeContributionTotal = 0;
+                    var unemploymentemployerContributionTotal = 0;
+
+                    $(win.document.body).find('table tbody tr').each(function() {
+                        var gross = parseFloat($(this).find('td:eq(2)').text().replace(/,/g, '')) || 0; 
+                        var net = parseFloat($(this).find('td:eq(3)').text().replace(/,/g, '')) || 0;
+                        var FEmp = parseFloat($(this).find('td:eq(4)').text().replace(/,/g, '')) || 0;
+                        var FEmpr = parseFloat($(this).find('td:eq(5)').text().replace(/,/g, '')) || 0;
+                        var SEmp = parseFloat($(this).find('td:eq(6)').text().replace(/,/g, '')) || 0;
+                        var SEmpr = parseFloat($(this).find('td:eq(7)').text().replace(/,/g, '')) || 0;
+                        var MEmp = parseFloat($(this).find('td:eq(8)').text().replace(/,/g, '')) || 0;
+                        var MEmpr = parseFloat($(this).find('td:eq(9)').text().replace(/,/g, '')) || 0;
+                        var UnEmp = parseFloat($(this).find('td:eq(10)').text().replace(/,/g, '')) || 0;
+                        var UnEmpr = parseFloat($(this).find('td:eq(11)').text().replace(/,/g, '')) || 0;
+                        grossTotal += gross;
+                        netTotal += net;
+                        federalemployeeContributionTotal += FEmp;
+                        federalemployerContributionTotal += FEmpr;
+                        socialemployeeContributionTotal += SEmp;
+                        socialemployerContributionTotal += SEmpr;
+                        medicareemployeeContributionTotal += MEmp;
+                        medicareemployerContributionTotal += MEmpr;
+                        unemploymentemployeeContributionTotal += UnEmp;
+                        unemploymentemployerContributionTotal += UnEmpr;
+                    });
+                    
+                    $(win.document.body).find('table tbody').append(
+                        '<tr>' +
+                            '<th colspan="2" style="text-align:right; font-weight: bold;">Total</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + grossTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + netTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + federalemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + federalemployerContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + socialemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + socialemployerContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + medicareemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + medicareemployerContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + unemploymentemployeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + unemploymentemployerContributionTotal.toFixed(2) + '</th>' +
+                        '</tr>'
+                    );
+
+                    $(win.document.body).find('div:last-child')
+                        .css('page-break-after', 'auto');
+                    $(win.document.body)
+                        .css('margin', '0')
+                        .css('padding', '0');
                 }
             },
-           {
-    "extend": "print",
-    "className": "btn-sm",
-    "exportOptions": {
-        "columns": ':visible'
-    },
-    "customize": function(win) {
-        // Hide specific elements in the print view
-        $(win.document.body).find('h1, h2, h3, h4, h5, h6, #printableArea').hide(); 
-
-        // Get the pay range from the date range picker
-        var payRange = $('#daterangepicker-field').val() !== '' ? "Pay Range : " + $('#daterangepicker-field').val() : "Pay Range : Not specified";
-
-        $(win.document.body)
-            .css('font-size', '10pt')
-            .prepend(
-                '<div style="text-align:center;"><h3>Federal Overall Summary</h3><br/><div id="date_period_range" style="text-align: center;font-weight: bolder;font-size: x-large;color: #337ab7;">' + payRange + '</div><br/></div>' 
-            )
-            .append(
-                '<div style="text-align:center;"></div>' 
-            );
-
-        // Clone the footer to the print window
-        var footerHtml = $(win.document.body).find('table tfoot').html();
-        $(win.document.body).find('table').append('<tfoot>' + footerHtml + '</tfoot>');
-
-        $(win.document.body).find('table')
-            .addClass('compact')
-            .css('font-size', 'inherit');
-
-        var rows = $(win.document.body).find('table tbody tr');
-        rows.each(function() {
-            if ($(this).find('td').length === 0) {
-                $(this).remove();
-            }
-        });
-
-        $(win.document.body).find('div:last-child')
-            .css('page-break-after', 'auto');
-        $(win.document.body)
-            .css('margin', '0')
-            .css('padding', '0');
-    }
-},
             {
                "extend": "colvis",
                "className": "btn-sm"
