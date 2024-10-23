@@ -1,0 +1,529 @@
+input {
+    border: 0;
+    background-color: transparent;
+    font-size: medium;
+  }
+  .ein-number {
+    width: 20px;
+    height: 20%;
+  }
+  .ein-number-2 {
+    width: 15px;
+    height: 20px;
+  }
+  .container-fluid {
+    width: 21cm;
+    height: 29.7cm;
+    position: relative;
+    margin: 0 auto;
+    page-break-after: always
+  } 
+  
+  .two-digit {
+    position: absolute;
+    top: 85px;
+    left: 204px;
+  }
+  .two-digit-2 {
+    position: absolute;
+    top: 85px;
+    left: 289px;
+  }
+  /* name-box */
+  .name-text {
+    position: absolute;
+    top: 117px;
+    left: 179px;
+  }
+  .name-text input {
+    height: 20px;
+    width: 250px;
+  }
+  /* trade-box */
+  .trade-text {
+    position: absolute;
+    top: 147px;
+    left: 150px;
+  }
+  .trade-text input {
+    height: 20px;
+    width: 250px;
+  }
+  /* address-text */
+  .Address-text {
+    position: absolute;
+    top: 177px;
+    left: 105px;
+  }
+  .Address-text input {
+    height: 20px;
+    width: 250px;
+  }
+  /* city-text */
+  .city-text {
+    position: absolute;
+    top: 225px;
+    left: 105px;
+  }
+  .city-text input {
+    height: 20px;
+    width: 225px;
+  }
+  /* state-text */
+  .state-text {
+    position: absolute;
+    top: 225px;
+    left: 355px;
+  }
+  .state-text input {
+    height: 20px;
+    width: 30px;
+  }
+  /* zipcode-text */
+  .zipcode-text {
+    position: absolute;
+    top: 226px;
+    left: 410px;
+  }
+  .zipcode-text input {
+    height: 20px;
+    width: 80px;
+  }
+  /* country */
+  .country {
+    position: absolute;
+    top: 261px;
+    left: 102px;
+  }
+  .country input {
+    height: 20px;
+    width: 100px;
+  }
+  /* foreign */
+  .foreign {
+    position: absolute;
+    top: 261px;
+    left: 277px;
+  }
+  .foreign input {
+    height: 20px;
+    width: 100px;
+  }
+  /* postal-code */
+  .postal-code {
+    position: absolute;
+    top: 261px;
+    left: 410px;
+  }
+  .postal-code input {
+    height: 20px;
+    width: 80px;
+  }
+  .typea{
+    position: absolute;
+    top: 121px;
+    left: 543px;
+  }
+  .typeb{
+    position: absolute;
+    top: 145px;
+    left: 543px;
+  }
+  .typec{
+    position: absolute;
+    top: 167px;
+    left: 543px;
+  }
+  .typed{
+    position: absolute;
+    top: 190px;
+    left: 543px;
+  }
+  .a1 input ,.a2 input{
+    height: 20px;
+    width: 20px;
+    text-align: center;
+  }
+  .a1{
+    position: absolute;
+    top: 346px;
+    left: 583px;
+  }
+  .a2{
+    position: absolute;
+    top: 346px;
+    left: 628px;
+  }
+  .b1{
+    position: absolute;
+    top: 378px;
+    left: 579px;
+  }
+  .b2{
+    position: absolute;
+    top: 402px;
+    left: 579px;
+  }
+  .p2-4a{
+    position: absolute;
+    top: 501px;
+    left: 202px;
+  }
+  .p2-4b{
+    position: absolute;
+    top: 517px;
+    left: 202px;
+  }
+  .p2-4c{
+    position: absolute;
+    top: 501px;
+    left: 395px;
+  }
+  .p2-4d{
+    position: absolute;
+    top: 517px;
+    left: 395px;
+  }
+  .p2-4e{
+    position: absolute;
+    top: 501px;
+    left: 551px;
+  }
+  
+  /* total-emp-payment */
+  .total-emp-payment {
+    position: absolute;
+    top: 456px;
+    left: 677px;
+  }
+  .total-emp-payment input {
+    height: 20px;
+    width: 80px;
+  }
+  /* row5 */
+  .row5 {
+    position: absolute;
+    top: 476px;
+    left: 498px
+  }
+  .row5 input {
+    height: 20px;
+    width: 80px;
+  }
+  
+  /* total-payment */
+  .total-payment {
+    position: absolute;
+    top: 550px;
+    left: 502px;
+  }
+  .total-payment input {
+    height: 20px;
+    width: 80px;
+  }
+  /* subtotal-text */
+  .subtotal-text {
+    position: absolute;
+    top: 569px;
+    left: 682px;
+  }
+  .subtotal-text input {
+    height: 20px;
+    width: 52px;
+  }
+  /* total-taxable-text */
+  .total-taxable-text {
+    position: absolute;
+    top: 598px;
+    left: 682px;;
+  }
+  .total-taxable-text input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-8 */
+  .row8 {
+    position: absolute;
+    top: 631px;
+    left: 682px;;
+  }
+  .row8 input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-9 */
+  .row9 {
+    position: absolute;
+    top: 684px;
+    left: 682px;;
+  }
+  .row9 input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-10 */
+  .row10 {
+    position: absolute;
+    top: 723px;
+    left: 682px;;
+  }
+  .row10 input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-11 */
+  .row11 {
+    position: absolute;
+    top: 750px;
+    left: 682px;;
+  }
+  .row11 input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-12 */
+  .row12 {
+    position: absolute;
+    top: 794px;
+    left: 682px;;
+  }
+  .row12 input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-13 */
+  .row13 {
+    position: absolute;
+    top: 825px;
+    left: 682px;;
+  }
+  .row13 input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-14 */
+  .row14 {
+    position: absolute;
+    top: 875px;
+    left: 682px;;
+  }
+  .row14 input {
+    height: 20px;
+    width: 52px;
+  }
+  /* row-15 */
+  .row15 {
+    position: absolute;
+    top: 905px;
+    left: 682px;;
+  }
+  .row15 input {
+    height: 20px;
+    width: 52px;
+  }
+  .row15a {
+    position: absolute;
+    top: 928px;
+    left: 508px;;
+  }
+  .row15b {
+    position: absolute;
+    top: 928px;
+    left: 627px;
+  
+  }
+  
+  /* second-page */
+  /* ein */
+  .trade-name {
+    position: absolute;
+    top: 68px;
+    left: 83px;
+  }
+  .ein {
+    position: absolute;
+    top: 6.5%;
+    left: 67.5%;
+  }
+  .ein input {
+    height: 20px;
+    width: 150px;
+  }
+  /* row16a */
+  .row16a {
+    position: absolute;
+    top: 153px;
+    left: 536px;
+  }
+  .row16b {
+    position: absolute;
+    top: 183px;
+     left: 536px;
+  }
+  .row16c {
+    position: absolute;
+    top: 213px;
+     left: 536px;
+  }
+  .row16d {
+    position: absolute;
+    top: 243px;
+     left: 536px;
+  }
+  .row17 {
+    position: absolute;
+    top: 274px;
+     left: 536px;
+  }
+  .row17a {
+    position: absolute;
+    top: 358px;
+    left: 332px;
+  }
+  .row17b {
+    position: absolute;
+    top: 358px;
+    left: 542px;
+  }
+  .p6-a{
+    position: absolute;
+    top: 364px;
+    left: 74px;
+  }
+  .p6-b{
+    position: absolute;
+    top: 416px;
+    left: 74px;
+  }
+  .p6-c input {
+    height: 18px;
+    width: 18px;
+    text-align: center;
+  }
+  
+  .p6-c {
+    position: absolute;
+    top: 393px;
+    left: 546px;
+  
+  }
+  .sign {
+    position: absolute;
+    top: 537px;
+    left: 154px;
+  }
+  .printname {
+    position: absolute;
+    top: 527px;
+    left: 489px;
+  
+  }
+  .printitle {
+    position: absolute;
+    top: 561px;
+    left: 490px;
+  }
+  .date {
+    position: absolute;
+    top: 599px;
+    left: 155px;
+  }
+  .dayphone {
+    position: absolute;
+    top: 588px;
+    left: 544px;
+  
+  }
+  .pre-check{
+    position: absolute;
+    top: 649px;
+    left: 713px;
+  }
+  .pre-name {
+    position: absolute;
+    top: 693px;
+    left: 186px;
+  }
+  .pre-sign {
+    position: absolute;
+    top: 732px  ;
+      left: 186px;
+  }
+  .first-name {
+    position: absolute;
+    top: 770px;
+      left: 186px;
+  }
+  
+  .address {
+    position: absolute;
+    top: 802px;
+      left: 186px;
+  }
+  .pre-city {
+    position: absolute;
+    top: 832px;
+      left: 186px;
+  }
+  .pre-state {
+    position: absolute;
+    top: 832px;
+    left: 391px;
+  }
+  .pre-pin {
+    position: absolute;
+    top: 693px;
+    left:570px;
+  }
+  .pre-date {
+    position: absolute;
+    top: 732px;
+    left:570px;
+  }
+  .pre-ein {
+    position: absolute;
+    top: 770px;
+    left:570px;
+  }
+  .pre-phone {
+    position: absolute;
+    top: 802px;
+    left:570px;
+  }
+  .pre-zipcode {
+    position: absolute;
+    top: 832px;
+    left:570px;
+  }
+  
+  /* third page */
+  .row1-ein {
+    position: absolute;
+    bottom: 26.8%;
+    left: 10.8%;
+  }
+  .dollar {
+    position: absolute;
+    bottom: 311px;
+    left: 598px;
+  }
+  .cent {
+    position: absolute;
+    bottom: 311px;
+    left: 703px;
+  }
+  .busniess-name {
+    position: absolute;
+    bottom: 273px;
+    left: 290px;
+  }
+  .b-address {
+    position: absolute;
+    bottom: 242px;
+    left: 290px;
+  }
+  .city-state-code {
+    position: absolute;
+    bottom: 212px;
+    left: 290px;
+  }
