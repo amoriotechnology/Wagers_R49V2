@@ -248,14 +248,7 @@
             </div>
             <!-- <div class='col-sm-2'> -->
             <div class="dropdown bootcol" id="drop">
-               <button id="exportBothTables" class="btnclr btn btn">Export Both Tables to Excel</button>
-              <!--  <button class="btnclr btn btn-default dropdown-toggle download" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="position: relative; left: 185px;">
-               <span class="fa fa-download"></span> <?= display('download') ?>
-               </button> -->
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-               <li><a href="#" id="generateXls"> <img src="<?= base_url() ?>assets/images/xls.png" width="24px"> <?= display('XLS') ?></a></li>
-            </ul>
-               <button type="button" class="btnclr btn btn-default dropdown-toggle"  onclick="printDiv('printableArea')" style="margin-top: -54px; margin-left: 304px;float:left; position: relative; top: 54px;"><b class="ti-printer"></b>&nbsp;<?= display('print') ?></button>
+               <button id="exportBothTables" class="btnclr btn btn">Download Excel</button>
             </div>
             <!-- </div> -->
          </div>
