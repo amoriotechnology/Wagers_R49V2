@@ -972,7 +972,7 @@ public function so_tax_report_employee($employee_name = null, $date = null, $sta
     }
     $this->db->where('ti.create_by', $user_id);
     $this->db->where('ti.uneditable', '1');
-    $this->db->order_by('c.id', 'ASC');
+    $this->db->order_by('c.id', 'DESC');
    
     $query = $this->db->get();
      if ($query->num_rows() > 0) {
@@ -1048,7 +1048,7 @@ public function so_tax_report_employer($emp_name = null, $date = null, $status =
     }
     $this->db->where('ti.uneditable', '1');
     $this->db->where('ti.create_by', $user_id);
-     $this->db->order_by('c.id', 'ASC');
+     $this->db->order_by('c.id', 'DESC');
     $this->db->group_by('c.id,c.first_name, c.middle_name, c.last_name, c.employee_tax,ti.start,ti.end,b.f_tax,b.m_tax,b.s_tax,b.u_tax,ti.cheque_date');
     
      $query = $this->db->get();
