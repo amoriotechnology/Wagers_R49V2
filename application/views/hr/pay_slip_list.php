@@ -78,7 +78,6 @@
                               <th class="text-center"><?php echo ('S.No') ?></th>
                               <th class="text-center"><?php echo ('Employee Name') ?></th>
                               <th class="text-center"><?php echo ('Job Title') ?></th>
-                              <th class="text-center"><?php echo ('Cheque Date') ?></th>
                               <th class="text-center"><?php echo ('Month') ?></th>
                               <th class="text-center"><?php echo ('Total hours/Days') ?></th>
                               <th class="text-center"><?php echo ('Total Amount') ?></th>
@@ -89,7 +88,7 @@
                         </thead>
                         <tfoot>
                             <tr class="btnclr">
-                                <th colspan="6" style="text-align:right">Total:</th>
+                                <th colspan="5" style="text-align:right">Total:</th>
                               
                                 <th class="text-center"></th>
                                 <th class="text-center"></th>
@@ -148,7 +147,6 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "table_id" },
          { "data": "first_name" },
          { "data": "job_title" },
-         { "data": "cheque_date" },
          { "data": "month" },
          { "data": "total_hours" },
          { "data": "tot_amt" },
@@ -156,10 +154,9 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "sales_comm" },
          { "data": "action" },
          ],
-        "order": [4, 'desc'],
         "columnDefs": [{
             "orderable": false,
-            "targets": [0, 9],
+            "targets": [0, 8],
             searchBuilder: {
                 defaultCondition: '='
             },
@@ -188,44 +185,43 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
         "pageLength": 10,
         "colReorder": true,
         "stateSave": true,
-        "footerCallback": function(row, data, start, end, display) {
-        var api = this.api();
+footerCallback: function(row, data, start, end, display) {
+    var api = this.api();
 
-        // Initialize total variables
-        var totalHours = 0;
-        var totalAmount = 0;
-        var totalOvertimeHours = 0;
-        var totalSalesCommission = 0;
+    // Initialize total variables
+    var totalHours = 0;
+    var totalAmount = 0;
+    var totalOvertimeHours = 0;
+    var totalSalesCommission = 0;
 
-        function convertToHours(overtime) {
-            if (!overtime) return 0; // Return 0 for empty or undefined values
-            var timeParts = overtime.split(':');
-            var hours = parseInt(timeParts[0], 10) || 0; // Parse hours
-            var minutes = parseInt(timeParts[1], 10) || 0; // Parse minutes
-            return hours + minutes / 60; // Convert to decimal hours
-        }
+    function convertToHours(overtime) {
+    if (!overtime) return 0; // Return 0 for empty or undefined values
+    var timeParts = overtime.split(':');
+    var hours = parseInt(timeParts[0], 10) || 0; // Parse hours
+    var minutes = parseInt(timeParts[1], 10) || 0; // Parse minutes
+    return hours + minutes / 60; // Convert to decimal hours
+}
+function convertToHHMM(totalHours) {
+    var hours = Math.floor(totalHours); // Get whole hours
+    var minutes = Math.round((totalHours - hours) * 60); // Get remaining minutes
+    return hours + ':' + (minutes < 10 ? '0' : '') + minutes; // Format as hh:mm
+}
+    api.rows({ page: 'current' }).every(function() {
+        var rowData = this.data();
+ totalAmount += parseFloat(rowData.tot_amt) || 0;
+        totalOvertimeHours += convertToHours(rowData.overtime); // Use previous function
+        totalSalesCommission += parseFloat(rowData.sales_comm) || 0;
+    });
+
+    // Convert total hours to hh:mm format for display
+    var totalOvertimeFormatted = convertToHHMM(totalOvertimeHours); // Use previous function
+
+    // Display the totals in the footer
     
-        function convertToHHMM(totalHours) {
-            var hours = Math.floor(totalHours); // Get whole hours
-            var minutes = Math.round((totalHours - hours) * 60); // Get remaining minutes
-            return hours + ':' + (minutes < 10 ? '0' : '') + minutes; // Format as hh:mm
-        }
-
-        api.rows({ page: 'current' }).every(function() {
-            var rowData = this.data();
-            totalAmount += parseFloat(rowData.tot_amt) || 0;
-            totalOvertimeHours += convertToHours(rowData.overtime); // Use previous function
-            totalSalesCommission += parseFloat(rowData.sales_comm) || 0;
-        });
-
-        // Convert total hours to hh:mm format for display
-        var totalOvertimeFormatted = convertToHHMM(totalOvertimeHours); // Use previous function
-
-        // Display the totals in the footer
-        $(api.column(6).footer()).html(totalAmount.toFixed(2)); // Column index for tot_amt, formatted to 2 decimal places
-        $(api.column(7).footer()).html(totalOvertimeFormatted); // Column index for overtime
-        $(api.column(8).footer()).html(totalSalesCommission.toFixed(2)); // Column index for sales_comm, formatted to 2 decimal places
-    },
+    $(api.column(5).footer()).html(totalAmount.toFixed(2)); // Column index for tot_amt, formatted to 2 decimal places
+    $(api.column(6).footer()).html(totalOvertimeFormatted); // Column index for overtime
+    $(api.column(7).footer()).html(totalSalesCommission.toFixed(2)); // Column index for sales_comm, formatted to 2 decimal places
+},
 
         "stateSaveCallback": function(settings, data) {
             localStorage.setItem('quotation', JSON.stringify(data));
