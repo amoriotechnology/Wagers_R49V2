@@ -216,15 +216,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "csv",
-                "title": "Report",
-                "className": "btn-sm",
-                "exportOptions": {
-                    "columns": ':visible'
-                }
-            },
-            {
-                "extend": "pdf",
-                "title": "Report",
+                "text": "Excel",
+                "title": "Medicare Tax Report",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':visible'
@@ -233,6 +226,8 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 "extend": "print",
                 "className": "btn-sm",
+                "text": "Pdf / Print",
+                "title": "",
                 "exportOptions": {
                     "columns": ':visible'
                 },
@@ -240,10 +235,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                     $(win.document.body)
                         .css('font-size', '10pt')
                         .prepend(
-                            '<div style="text-align:center;"><h3>Manage Quotation</h3></div>'
-                        )
-                        .append(
-                            '<div style="text-align:center;"><h4>amoriotech.com</h4></div>'
+                            '<div style="text-align:center;"><h3>Medicare Tax</h3></div>'
                         );
                     $(win.document.body).find('table')
                         .addClass('compact')
@@ -254,6 +246,25 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
                             $(this).remove();
                         }
                     });
+
+                    var employeeContributionTotal = 0;
+                    var employerContributionTotal = 0;
+
+                    $(win.document.body).find('table tbody tr').each(function() {
+                        var employeeamount = parseFloat($(this).find('td:eq(6)').text()) || 0; 
+                        var employeramount = parseFloat($(this).find('td:eq(7)').text()) || 0;
+                        employeeContributionTotal += employeeamount;
+                        employerContributionTotal += employeramount;
+                    });
+                    
+                    $(win.document.body).find('table tbody').append(
+                        '<tr>' +
+                            '<th colspan="6" style="text-align:right; font-weight: bold;">Total</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + employeeContributionTotal.toFixed(2) + '</th>' +
+                            '<th style="text-align:center; font-weight: bold;">' + employerContributionTotal.toFixed(2) + '</th>' +
+                        '</tr>'
+                    );
+
                     $(win.document.body).find('div:last-child')
                         .css('page-break-after', 'auto');
                     $(win.document.body)

@@ -540,6 +540,7 @@ public function state_tax_report($limit, $start, $orderField, $orderDirection, $
         $this->db->or_like("c.middle_name", $search);
         $this->db->or_like("c.employee_tax", $search);
         $this->db->like("d.month", $search);
+        $this->db->like("d.cheque_date", $search);
         $this->db->group_end();
     }
     if ($taxname) {
@@ -1469,13 +1470,19 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
+            $this->db->or_like("a.month", $search);
+            $this->db->or_like("a.cheque_date", $search);
+            $this->db->or_like("b.f_tax", $search);
+            $this->db->or_like("b.s_tax", $search);
+            $this->db->or_like("b.m_tax", $search);
+            $this->db->or_like("b.u_tax", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
         $this->db->limit($limit, $offset);
         $this->db->order_by($orderField, $orderDirection);
         $query = $this->db->get();
-      //   echo $this->db->last_query(); die();
+        // echo $this->db->last_query(); die();
         if ($query === false) {
             return false;
         }
@@ -1508,6 +1515,12 @@ public function getPaginatedfederalincometax($limit, $offset, $orderField, $orde
             $this->db->or_like("c.last_name", $search);
             $this->db->or_like("c.middle_name", $search);
             $this->db->or_like("c.employee_tax", $search);
+            $this->db->or_like("a.month", $search);
+            $this->db->or_like("a.cheque_date", $search);
+            $this->db->or_like("b.f_tax", $search);
+            $this->db->or_like("b.s_tax", $search);
+            $this->db->or_like("b.m_tax", $search);
+            $this->db->or_like("b.u_tax", $search);
             $this->db->group_end();
         }
         $this->db->where("b.create_by", $decodedId);
@@ -1545,6 +1558,12 @@ public function getPaginatedSocialTaxSummary($limit, $offset, $orderField, $orde
         $this->db->or_like("c.last_name", $search);
         $this->db->or_like("c.middle_name", $search);
         $this->db->or_like("c.employee_tax", $search);
+        $this->db->or_like("b.total_amount", $search);
+        $this->db->or_like("b.net_amount", $search);
+        $this->db->or_like("b.f_tax", $search);
+        $this->db->or_like("b.s_tax", $search);
+        $this->db->or_like("b.m_tax", $search);
+        $this->db->or_like("b.u_tax", $search);
         $this->db->group_end();
     }
     $this->db->limit($limit, $offset);

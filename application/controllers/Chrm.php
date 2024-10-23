@@ -425,15 +425,11 @@ public function stateIncomeReportData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post("order")[0]["dir"];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $employee_name  = $this->input->post('employee_name');
     $taxname = $this->input->post('taxname');
-    $orderDirection = strtolower($orderDirection);
     $url = 'Income tax';
-    if (!in_array($orderDirection, ['asc', 'desc'])) {
-        $orderDirection = 'asc';
-    }
     $stateTaxReport = $this->Hrm_model->state_tax_report($limit, $start, $orderField, $orderDirection, $search, $taxname, $date, $employee_name,$decodedId);
     $totalItems  = $this->Hrm_model->getTotalIncomeTax($search,$date,$emp_name,$decodedId,$taxname);
     $livingStateTaxReport = $this->Hrm_model->living_state_tax_report($employee_name, $taxname, $date);
@@ -617,7 +613,7 @@ public function federaIndexData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post("order")[0]["dir"];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $emp_name       = $this->input->post('employee_name');
     $items          = $this->Hrm_model->getPaginatedfederalincometax($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name, $decodedId);
@@ -675,7 +671,7 @@ public function securitytaxIndexData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post("order")[0]["dir"];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $emp_name       = $this->input->post('employee_name');
     $items          = $this->Hrm_model->getPaginatedfederalincometax($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name,$decodedId);
@@ -748,7 +744,7 @@ public function medicaretaxIndexData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post("order")[0]["dir"];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $emp_name       = $this->input->post('employee_name');
     $items          = $this->Hrm_model->getPaginatedfederalincometax($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name,$decodedId);
@@ -821,7 +817,7 @@ public function unemploymenttaxIndexData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post("order")[0]["dir"];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $emp_name       = $this->input->post('employee_name');
     $items          = $this->Hrm_model->getPaginatedfederalincometax($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name,$decodedId);
@@ -919,7 +915,7 @@ public function overallSocialtaxIndexData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post("order")[0]["dir"];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $emp_name       = $this->input->post('employee_name');
     
