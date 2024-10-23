@@ -3437,25 +3437,25 @@ public function getQuarterlyMonthData($quarter)
        }
    
        try {
-           $this->db->select('*');
-           $this->db->from('company_information');
-           $this->db->where('company_id', $user_id);
-   
-           // Execute the query
-           $query = $this->db->get();
-   
-           // Check for query execution success
-           if ($query === false) {
-               // Log or handle the database error
-               return false;
-           }
-           if ($query->num_rows() > 0) {
-               // Return the result as an array
-               return $query->result_array();
-           }
-   
-           // No rows found, return false
-           return false;
+        $this->db->select('*');
+        $this->db->from('company_information');
+        $this->db->where('company_id', $user_id);
+
+        // Execute the query
+        $query = $this->db->get();
+
+        // Check for query execution success
+        if ($query === false) {
+            // Log or handle the database error
+            return false;
+        }
+        if ($query->num_rows() > 0) {
+            // Return the result as an array
+            return $query->result_array();
+        }
+
+        // No rows found, return false
+        return false;
        } catch (Exception $e) {
            log_message('error', 'Error in get_company_info: ' . $e->getMessage());
            return false;
@@ -4386,6 +4386,10 @@ public function getTotalpayslip($search, $date, $emp_name = 'All')
         return false;
     }
     return $query->num_rows();
+}
+
+public function getDatas($table, $select, $where) {
+    return $this->db->select($select)->from($table)->where($where)->get()->result_array();
 }
 
 
