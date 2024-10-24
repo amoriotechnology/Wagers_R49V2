@@ -198,7 +198,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 "extend": "csv",
                 "text": "Excel",
-                "title": "Report",
+                "title": "Manage Employee",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':not(:eq(9))'
