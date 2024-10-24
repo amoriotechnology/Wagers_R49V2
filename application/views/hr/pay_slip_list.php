@@ -242,48 +242,10 @@ function convertToHHMM(totalHours) {
             {
                 "extend": "csv",
                 "title": "Generated Pay Slips List Report",
+                "text": "Excel",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':not(:eq(8))'
-                }
-            },
-           {
-                "extend": "pdf",
-                "title": "Generated Pay Slips List Report",
-                "className": "btn-sm",
-                "exportOptions": {
-                    "columns": ':not(:eq(8))'  
-                },
-                "customize": function(doc) {
-                    var totalAmount = 0;
-                    var totalOvertime = 0;
-                    var totalSalesCommission = 0;
-
-                    $(doc.content[1].table.body).each(function(index, row) {
-                        if (index === 0) return; 
-                        var amount = parseFloat(row[5].text) || 0; 
-                        var overtime = parseFloat(row[6].text) || 0; 
-                        var salesCommission = parseFloat(row[7].text) || 0;
-
-                        totalAmount += amount;
-                        totalOvertime += overtime;
-                        totalSalesCommission += salesCommission;
-                    });
-
-                    doc.content[1].table.body.push(
-                        [
-                            { text: 'Total', style: 'tableHeader', colSpan: 5, alignment: 'right', bold: true },
-                            {},
-                            {},
-                            {},
-                            {},
-                            { text: totalAmount.toFixed(2), style: 'tableCell', alignment: 'center', bold: true },
-                            { text: totalOvertime.toFixed(2), style: 'tableCell', alignment: 'center', bold: true },
-                            { text: totalSalesCommission.toFixed(2), style: 'tableCell', alignment: 'center', bold: true }
-                        ]
-                    );
-
-                    doc.content.push({ text: '', pageBreak: 'after' });
                 }
             },
             {
