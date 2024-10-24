@@ -414,7 +414,7 @@ function initializeTable() {
     printableArea.empty();
     var tableHtml = `
      <div id='date_period_range' style='text-align: center;font-weight: bolder;font-size: x-large;color: #337ab7;'></div>
-        <table class="table table-bordered" cellspacing="0" width="100%"   id="ProfarmaInvList">
+        <table class="table table-bordered " cellspacing="0" width="100%"   id="ProfarmaInvList">
             <thead></thead>
             <tbody></tbody>
             <tfoot></tfoot>
@@ -614,7 +614,24 @@ function populateTable(response) {
         );
     }
     // Re-initialize DataTable
-    ProfarmaInvList.DataTable();
+    // ProfarmaInvList.DataTable();
+    $('#ProfarmaInvList').DataTable({
+        dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>" +
+            "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-6'i><'col-sm-6'p>>",
+        buttons: [
+        {
+            extend: 'csvHtml5',
+            text: 'Export to CSV',
+            title: 'Proforma Invoice List'
+        },
+        {
+            extend: 'print',
+            text: 'Print',
+            title: 'Proforma Invoice List',
+            autoPrint: true
+        }
+        ],
+    });
 }
 
 // document.getElementById("btn").addEventListener("click", () => {

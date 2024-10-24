@@ -1,7 +1,11 @@
 <?php
  error_reporting(0);
-if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
+if (!defined('BASEPATH'))exit('No direct script access allowed');
+
+require 'D:/Wamp/www/run/Wagers_R49V2/application/libraries/dompdf/vendor/autoload.php';
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class Chrm extends CI_Controller {
     public $menu;
@@ -2780,7 +2784,7 @@ public function checkTimesheet() {
 
 
 
-public function time_list($timesheet_id = null,$templ_name)
+public function time_list($timesheet_id = null,$templ_name = null)
         {
            $CI = & get_instance();
            $CC = & get_instance();
@@ -4594,76 +4598,76 @@ private function processTaxData($key, $value) {
 
 
 
-           public function timesheed_inserted_data($id) {
-            //    echo $id; .;
-               $CI = & get_instance();
-               $CC = & get_instance();
-               $CA = & get_instance();
-    
-               $w = & get_instance();
-               $w->load->model('Ppurchases');
-               $CI->load->model('Invoices');
-               $CI->load->model('Web_settings');
-               $CA->load->model('invoice_design');
-               $CC->load->model('invoice_content');
-               $CI = & get_instance();
-               $this->auth->check_admin_auth();
-               $CI->load->model('Hrm_model');
-                  $timesheet_data = $CI->Hrm_model->timesheet_data($id);
-                //   print_r($timesheet_data); .;
-                  $setting=  $CI->Web_settings->retrieve_setting_editdata();
-                  $dataw = $CA->invoice_design->retrieve_data();
-                  $datacontent = $CC->invoice_content->retrieve_data();
-                  $company_info = $w->Ppurchases->retrieve_company();
+public function timesheed_inserted_data($id, $type) {
+  //    echo $id; .;
+  $CI = & get_instance();
+  $CC = & get_instance();
+  $CA = & get_instance();
 
-                  // $invoice_data_info = $CC->invoice_content->invoice_data_info();
-    
-                  
-                  // print_r()
-    
-                   $data=array(
-                   'curn_info_default' =>$curn_info_default[0]['currency_name'],
-                   'currency'  =>$currency_details[0]['currency'],
-                   'header'=> $dataw[0]['header'],
-                   'logo'=>(!empty($setting[0]['invoice_logo'])?$setting[0]['invoice_logo']:$company_info[0]['logo']),  
-                   'color'=> $dataw[0]['color'],
-                   'template'=> $dataw[0]['template'],
-                  'first_name'      => $timesheet_data[0]['first_name'],
-                   'id'      => $timesheet_data[0]['id'],
-                   'last_name'     => $timesheet_data[0]['last_name'],
-                   'designation'   => $timesheet_data[0]['designation'],
-                   'phone'            => $timesheet_data[0]['phone'],
-                   'photo'   => $timesheet_data[0]['image'],
-                   'rate_type' => $timesheet_data[0]['rate_type'],
-                   'hrate' => $timesheet_data[0]['hrate'],
-                   'email'=> $timesheet_data[0]['email'],
-                   'blood_group'=> $timesheet_data[0]['blood_group'],
-                   'social_security_number'=> $timesheet_data[0]['social_security_number'],
-                   'routing_number'=> $timesheet_data[0]['routing_number'],
-                   'address_line_1'=> $timesheet_data[0]['address_line_1'],
-                   'address_line_2'=> $timesheet_data[0]['address_line_2'],
-                   'country'=> $timesheet_data[0]['country'],
-                   'city'=> $timesheet_data[0]['city'],
-                   'zip'=> $timesheet_data[0]['zip'],
-                   'files'=> $timesheet_data[0]['files'],
-                   'company'=> $datacontent,
-                   'invoice_data_info'=> $invoice_data_info,
-    
-                   'company'=>(!empty($datacontent[0]['company_name'])?$datacontent[0]['company_name']:$company_info[0]['company_name']),   
-                   'com_phone'=>(!empty($datacontent[0]['mobile'])?$datacontent[0]['mobile']:$company_info[0]['mobile']),   
-                   'com_email'=>(!empty($datacontent[0]['email'])?$datacontent[0]['email']:$company_info[0]['email']),   
-                   // 'reg_number'=>(!empty($datacontent[0]['reg_number'])?$datacontent[0]['reg_number']:$company_info[0]['reg_number']),  
-                   'website'=>(!empty($datacontent[0]['website'])?$datacontent[0]['website']:$company_info[0]['website']),   
-                   'address'=>(!empty($datacontent[0]['address'])?$datacontent[0]['address']:$company_info[0]['address']),
+  $w = & get_instance();
+  $w->load->model('Ppurchases');
+  $CI->load->model('Invoices');
+  $CI->load->model('Web_settings');
+  $CA->load->model('invoice_design');
+  $CC->load->model('invoice_content');
+  $CI = & get_instance();
+  $this->auth->check_admin_auth();
+  $CI->load->model('Hrm_model');
 
-    
-               );
-                // print_r($data);
-                print_r($dataw[0]['color']);
-                // $timesheet_data[0]['first_name']
-           $content = $this->load->view('invoice/employe_timesheet_html', $data, true);
-           $this->template->full_admin_html_view($content);
-           }
+  $emp_data = [];
+  $setting=  $CI->Web_settings->retrieve_setting_editdata();
+  $company_info = $w->Ppurchases->retrieve_company();
+
+  if($type == 'emp_data') {
+    $emp_data = $this->Hrm_model->getDatas('employee_history', '*', ['id' => $id]); 
+  } else {
+    /* return timesheet_info and employee history datas */
+    $timesheet_data = $CI->Hrm_model->timesheet_data($id);
+    $timesheet_details = $CI->Hrm_model->getDatas('timesheet_info_details', '*', ['timesheet_id' => $id]);
+    $admin_name = $this->Hrm_model->getDatas('administrator', '*', ['adm_id'=> $timesheet_data[0]['admin_name']]);
+  }
+
+  $data=array(
+    'company_name'    => $company_info[0]['company_name'],
+    'com_phone'       => $company_info[0]['mobile'],   
+    'com_email'       => $company_info[0]['email'],   
+    'website'         => $company_info[0]['website'],   
+    'address'         => $company_info[0]['address'],
+    'currency'        => $company_info[0]['currency'],
+    'logo'            => (!empty($setting[0]['invoice_logo'])?$setting[0]['invoice_logo'] : $company_info[0]['logo']), 
+    'id'              => $timesheet_data[0]['id'], 
+    'first_name'      => $timesheet_data[0]['first_name'],
+    'last_name'       => $timesheet_data[0]['last_name'],
+    'payroll_type'    => $timesheet_data[0]['payroll_type'],
+    'designation'     => $timesheet_data[0]['designation'],
+    'sheet_date'      => $timesheet_data[0]['month'],
+    'cheque_date'     => $timesheet_data[0]['cheque_date'],
+    'cheque_no'       => $timesheet_data[0]['cheque_no'],
+    'payment_method'  => $timesheet_data[0]['payment_method'],
+    'timesheet_data'  => $timesheet_details,
+    'admin_name'      => $admin_name[0]['adm_name'],
+    'color' => $setting[0]['color'],
+    'type' => $type,
+    'emp_datas' => $emp_data,
+  );
+
+  $content = $this->load->view('invoice/emp_timesheet_html', $data, true);
+
+  $PDF = new Dompdf();
+  $PDF->loadHtml($content);
+  $PDF->setPaper('A4', 'portrait');
+  $PDF->set_option('isHtml5ParserEnabled', true);
+  $PDF->set_option('isCssFloatEnabled', true);
+  $PDF->render();
+  $filename = $company_info[0]['unique_id'] . '.pdf';
+  
+  if (empty($pdf)) {
+    $PDF->stream($filename, array('Attachment' => 0));
+  } else {
+    return $content;
+  }
+ 
+}
     
 
 
@@ -4714,7 +4718,7 @@ public function manageTimesheetListData()
 
     $user ='<a href="' . base_url("Chrm/employee_payslip_permission/" . $item["timesheet_id"]) . '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-user" aria-hidden="true"></i></a>';
 
-    $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["timesheet_id"]) .
+    $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["timesheet_id"]."/timesheet") .
             '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-download" aria-hidden="true"></i></a>';
 
     $delete = '<a onClick=deleteTimesheetdata('.$item["timesheet_id"].') class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-trash" aria-hidden="true"></i></a>';
@@ -7086,7 +7090,7 @@ if ($county_tax == $county_tax) {
 
         $user ='<a href="' . base_url("Chrm/employee_details/" . $item["id"]) . '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-user" aria-hidden="true"></i></a>';
 
-        $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["id"]) .
+        $download = '<a href="' . base_url("Chrm/timesheed_inserted_data/" .$item["id"]."/emp_data") .
             '" class="btnclr btn btn-sm" style="background-color:#424f5c; margin-right: 5px;"><i class="fa fa-download" aria-hidden="true"></i></a>';
 
         $edit =
@@ -7684,52 +7688,42 @@ public function form940Form()
  
 public function form941Form($selectedValue = null)
 {
-    
-  
-  
-    $CI = &get_instance();
-    $this->load->model('Hrm_model');
-    // Load data from the model
-    $data['get_cdata'] = $this->Hrm_model->get_employer_federaltax();
-    $data['get_cominfo'] = $this->Hrm_model->get_company_info();
-    $data['fed_tax'] = $this->Hrm_model->social_tax();
-$data['tat'] = $this->Hrm_model->so_total_amount($selectedValue);
-// print_r($data['tat']); die();
-$total = 0;
+  $CI = &get_instance();
+  $this->load->model('Hrm_model');
 
-foreach ($data['tat'] as $item) {
+  // Load data from the model
+  $data['get_cdata'] = $this->Hrm_model->get_employer_federaltax();
+  $data['get_cominfo'] = $this->Hrm_model->get_company_info();
+  $data['fed_tax'] = $this->Hrm_model->social_tax();
+  $data['tat'] = $this->Hrm_model->so_total_amount($selectedValue);
+  $total = 0;
+
+  foreach ($data['tat'] as $item) {
     $total += $item['tamount'];
-}
-//echo $total;
-$data['tamount']=$total;
-    $data['get_userlist'] = $CI->db->select('*')->from('users')->where('user_id',$this->session->userdata('user_id'))->get()->result_array();
+  }
 
-    $data['tif'] = $this->Hrm_model->get_taxinfomation($selectedValue);
-    $data['get_941_sc_info'] = $this->Hrm_model->get_941_sc_info($selectedValue);
+  $data['tamount']=$total;
+  $data['get_userlist'] = $CI->db->select('*')->from('users')->where('user_id',$this->session->userdata('user_id'))->get()->result_array();
+  $data['tif'] = $this->Hrm_model->get_taxinfomation($selectedValue);
+  $data['get_941_sc_info'] = $this->Hrm_model->get_941_sc_info($selectedValue);
 
-   $data['gt'] = $CI->db->select('COUNT(DISTINCT templ_name) AS count_rows')
-    ->from('timesheet_info')
-    ->where('quarter', $selectedValue)
-     ->where('create_by', $this->session->userdata('user_id'))
-     ->where('payroll_type !=', 'Sales Partner') 
-    ->get()
-    ->row()->count_rows;
+  $data['gt'] = $CI->db->select('COUNT(DISTINCT templ_name) AS count_rows')
+  ->from('timesheet_info')->where('quarter', $selectedValue)->where('create_by', $this->session->userdata('user_id'))->where('payroll_type !=', 'Sales Partner')->get()->row()->count_rows;
  // echo $this->db->last_query();
-    $view_data = array(
-        'title' => '941 Form',
-        'tamount' => $data['tamount'],
-        'get_cdata' => $data['get_cdata'], 
-        'get_cominfo' => $data['get_cominfo'],
-        'tif' => $data['tif'],
-        'get_userlist' => $data['get_userlist'], 
-        'gt' => $data['gt'], 
-        'get_941_sc_info' => $data['get_941_sc_info'],
-        'selectedValue' => $selectedValue ,
+  $view_data = array(
+    'title' => '941 Form',
+    'tamount' => $data['tamount'],
+    'get_cdata' => $data['get_cdata'], 
+    'get_cominfo' => $data['get_cominfo'],
+    'tif' => $data['tif'],
+    'get_userlist' => $data['get_userlist'], 
+    'gt' => $data['gt'], 
+    'get_941_sc_info' => $data['get_941_sc_info'],
+    'selectedValue' => $selectedValue ,
+  );
 
-    );
-//print_r( $data['tif']);
-    $content = $CI->parser->parse('hr/f941', $view_data, true);
-    $this->template->full_admin_html_view($content);
+  $content = $CI->parser->parse('hr/f941', $view_data, true);
+  $this->template->full_admin_html_view($content);
 }
 
 
