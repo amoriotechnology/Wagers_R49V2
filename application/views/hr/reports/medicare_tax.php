@@ -226,7 +226,6 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 "extend": "print",
                 "className": "btn-sm",
-                "text": "Pdf / Print",
                 "title": "",
                 "exportOptions": {
                     "columns": ':visible'
