@@ -744,7 +744,7 @@ public function medicaretaxIndexData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post('order')[0]['dir'];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $emp_name       = $this->input->post('employee_name');
     $items          = $this->Hrm_model->getPaginatedfederalincometax($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name,$decodedId);
@@ -817,7 +817,7 @@ public function unemploymenttaxIndexData()
     $start          = $this->input->post("start");
     $search         = $this->input->post("search")["value"];
     $orderField     = $this->input->post("columns")[$this->input->post("order")[0]["column"]]["data"];
-    $orderDirection = $this->input->post('order')[0]['dir'];
+    $orderDirection = "desc";
     $date           = $this->input->post("federal_date_search");
     $emp_name       = $this->input->post('employee_name');
     $items          = $this->Hrm_model->getPaginatedfederalincometax($limit,$start,$orderField,$orderDirection,$search,$date,$emp_name,$decodedId);
