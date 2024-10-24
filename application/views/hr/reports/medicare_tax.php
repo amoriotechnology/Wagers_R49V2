@@ -151,7 +151,6 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
          { "data": "m_mtax" },
          { "data": "tm_mtax" },
          ],
-        "order": [4, 'desc'],
         "columnDefs": [{
             "orderable": false,
             "targets": [0, 7],
