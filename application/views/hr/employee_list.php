@@ -197,14 +197,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
             {
                 "extend": "csv",
-                "title": "Report",
-                "className": "btn-sm",
-                "exportOptions": {
-                    "columns": ':not(:eq(9))'
-                }
-            },
-            {
-                "extend": "pdf",
+                "text": "Excel",
                 "title": "Report",
                 "className": "btn-sm",
                 "exportOptions": {
