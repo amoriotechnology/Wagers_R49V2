@@ -196,14 +196,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 "extend": "csv",
                 "title": "Manage Timesheet",
-                "className": "btn-sm",
-                "exportOptions": {
-                    "columns": ':not(:eq(7))'
-                }
-            },
-            {
-                "extend": "pdf",
-                "title": "Manage Timesheet",
+                "text": "Excel",
                 "className": "btn-sm",
                 "exportOptions": {
                     "columns": ':not(:eq(7))'
@@ -212,6 +205,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             {
                 "extend": "print",
                 "className": "btn-sm",
+               "title": "Manage Timesheet",
                 "exportOptions": {
                     "columns": ':not(:eq(7))'
                 },
