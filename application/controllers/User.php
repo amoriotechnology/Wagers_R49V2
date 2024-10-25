@@ -377,7 +377,7 @@ public function company_insert_branch(){
 // echo $this->db->last_query(); die();
         } 
     }
-        //echo $this->db->last_query();
+       
 //die();
     if($insert)
     {
