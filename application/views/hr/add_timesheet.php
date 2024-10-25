@@ -767,7 +767,7 @@ for (let i = 0; i <= Days; i++) {
     let dayString = weekDays[newDate.getDay()].slice(0, 10);
 let day = ("0" + newDate.getDate()).slice(-2); 
 let month = ("0" + (newDate.getMonth() + 1)).slice(-2); 
-let dateString = `${day}/${month}/${newDate.getFullYear()}`;
+let dateString = `${month}/${day}/${newDate.getFullYear()}`;
     if (response.includes('salary') || response.includes('Salaried-weekly') || response.includes('Salaried-BiWeekly') || response.includes('Salaried-Monthly')  || response.includes('Salaried-BiMonthly'  )) {
     var presentCount = $('input[type="checkbox"].present:checked').length + 1;
         $('#total_net').val(presentCount);

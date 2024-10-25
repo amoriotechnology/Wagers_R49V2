@@ -67,8 +67,9 @@ public function state_tax_list_employer()
     $this->db->where('created_by', $user_id);
     $query = $this->db->get('tax_history_employer');
    if ($query->num_rows() > 0) {
-    return $query->result_array();
-}
+        return $query->result_array();
+    }
+    
 }
 
 
@@ -2472,18 +2473,18 @@ public function administrator_info($ads_id){
 
 
 
-  public function time_sheet_data($id){
+public function time_sheet_data($id){
     $this->db->select('*');
     $this->db->from('timesheet_info a');
-        $this->db->join('timesheet_info_details b' , 'a.timesheet_id = b.timesheet_id');
-   $this->db->where('a.timesheet_id' , $id);
-   // $this->db->where('a.created_by' ,$this->session->userdata('user_id'));
- $query = $this->db->get();
-  //echo $this->db->last_query();die();
+    $this->db->join('timesheet_info_details b' , 'a.timesheet_id = b.timesheet_id');
+    $this->db->where('a.timesheet_id' , $id);
+    // $this->db->where('a.created_by' ,$this->session->userdata('user_id'));
+    $query = $this->db->get();
+
     if ($query->num_rows() > 0) {
         return $query->result_array();
     }
-  }
+}
 
     public function administrator_data(){
 
@@ -2690,14 +2691,17 @@ public function employee_name($id) {
 
 
 public function timesheet_data($id) {
-    $this->db->select('*');
-    $this->db->from('employee_history');
-    $this->db->where('id', $id);
+
+    $this->db->select('*')->from('employee_history a');
+    $this->db->join('timesheet_info b','a.id = b.templ_name');
+    $this->db->where('b.timesheet_id', $id);
+    $this->db->where('a.create_by', $this->session->userdata('user_id'));
     $query = $this->db->get();
-//  echo $this->db->last_query(); die();
-      if ($query->num_rows() > 0) {
-          return $query->result_array();
-      }
+
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    }
+    return false;
 }
     //Count designation
 

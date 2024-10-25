@@ -4,3 +4,4 @@ application/logs/*
 application/ci_sessions/*
 uploads/supplier/*
 uploads/*
+/vendor/
